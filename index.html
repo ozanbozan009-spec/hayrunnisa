@@ -755,7 +755,7 @@
         });
 
         // --- ZAMANLAYICI AYARI ---
-        const targetDate = new Date().getTime() + (5 * 365 * 24 * 60 * 60 * 1000); 
+        const targetDate = new Date("2030-01-01T00:00:00").getTime(); 
 
         const timerInterval = setInterval(() => {
             const now = new Date().getTime();
@@ -789,4 +789,5 @@
 
     </script>
 </body>
+
 </html>
