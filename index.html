@@ -7,24 +7,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    
     <style>
-        /* --- TEMEL AYARLAR --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #000;
             color: #fff;
             font-family: 'Montserrat', sans-serif;
-            overflow: hidden; /* Scroll engelleme */
+            overflow: hidden; 
             height: 100vh;
-            height: 100dvh; /* Mobil tarayıcı çubuğu sorunu için */
+            height: 100dvh; 
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
         }
 
-        /* Warp sırasında ekranı titretmek için */
+        
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             10% { transform: translate(-1px, -2px) rotate(-1deg); }
@@ -43,14 +41,14 @@
             animation: shake 0.5s infinite;
         }
 
-        /* --- CANVAS (YILDIZLAR) --- */
+        
         #canvas-bg {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 0;
         }
 
-        /* --- BEYAZ FLAŞ EFEKTİ --- */
+     
         #flash-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: white;
@@ -58,7 +56,6 @@
             transition: opacity 1.5s ease;
         }
 
-        /* --- VIGNETTE --- */
         .vignette {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -66,7 +63,6 @@
             z-index: 2; pointer-events: none;
         }
 
-        /* --- PREMIUM LOGIN EKRANI --- */
         #login-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -77,14 +73,14 @@
             justify-content: center;
             align-items: center;
             transition: opacity 0.8s ease;
-            padding: 20px; /* Mobilde kenar boşluğu */
+            padding: 20px; 
         }
 
         .login-card { 
             position: relative;
             text-align: center; 
             width: 100%; 
-            max-width: 400px; /* Maksimum genişlik sınırı */
+            max-width: 400px; 
             padding: 3rem 2rem;
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
@@ -108,7 +104,6 @@
             pointer-events: none;
         }
 
-        /* Sci-Fi Loader */
         .scifi-loader {
             position: relative;
             width: 80px; height: 80px;
@@ -148,7 +143,7 @@
             font-family: 'Cinzel', serif;
             letter-spacing: 4px;
             margin-bottom: 5px;
-            font-size: clamp(1.2rem, 5vw, 1.6rem); /* Responsive font */
+            font-size: clamp(1.2rem, 5vw, 1.6rem); 
             color: #fff;
             text-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
         }
@@ -161,7 +156,6 @@
             text-transform: uppercase;
         }
 
-        /* Input Alanı */
         .input-group {
             position: relative;
             margin-bottom: 25px;
@@ -224,7 +218,6 @@
             text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
         }
 
-        /* --- ANA KART (YÖRÜNGE) --- */
         .glass-card {
             position: relative; z-index: 10;
             background: rgba(20, 20, 30, 0.4); 
@@ -235,7 +228,7 @@
             box-shadow: 0 0 80px rgba(0,0,0,0.8); 
             text-align: center; 
             max-width: 850px; 
-            width: 90%; /* Mobilde kenarlardan taşmayı önler */
+            width: 90%; 
             
             opacity: 0; transform: scale(0.9);
             transition: all 2s ease;
@@ -254,8 +247,8 @@
 
         h1 {
             font-family: 'Cinzel', serif; 
-            font-size: clamp(2rem, 6vw, 3.8rem); /* Responsive Font Boyutu */
-            letter-spacing: clamp(4px, 1vw, 12px); /* Responsive Harf Aralığı */
+            font-size: clamp(2rem, 6vw, 3.8rem); 
+            letter-spacing: clamp(4px, 1vw, 12px); 
             margin-bottom: 10px; color: #fff;
             text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
             line-height: 1.2;
@@ -276,7 +269,7 @@
             justify-content: center; 
             gap: 30px; 
             margin-bottom: 40px; 
-            flex-wrap: wrap; /* Küçük ekranlarda sığmazsa alt satıra geçmesin, boyutu küçülsün diye aşağıda ayar var ama wrap güvenliktir */
+            flex-wrap: wrap; 
         }
         
         .time-unit { 
@@ -314,11 +307,11 @@
             filter: blur(5px); 
             transition: all 1.5s ease; 
             user-select: none;
-            word-wrap: break-word; /* Mobilde uzun yazı taşmasın */
+            word-wrap: break-word; 
         }
         .status-text { font-size: 0.6rem; margin-top: 15px; color: #667; letter-spacing: 2px; }
 
-        /* --- MOBİL İÇİN ÖZEL AYARLAR --- */
+        
         @media (max-width: 768px) {
             .glass-card { 
                 padding: 2rem 1.5rem; 
@@ -416,9 +409,7 @@
     </div>
 
     <script>
-        /**
-         * 1. BÖLÜM: 3D WARP DRIVE SİMÜLASYONU + RANDOM METEORLAR
-         */
+        
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         
@@ -443,12 +434,11 @@
             cx = width / 2;
             cy = height / 2;
         }
-        // Mobilde adres çubuğu değişince resize tetiklenebilir, bu yüzden debounce kullanmak sağlıklı olur ama
-        // bu basitlikte direkt çağırmak da iş görür.
+        
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // --- YILDIZ SINIFI ---
+        
         class Star {
             constructor() {
                 this.reset();
@@ -500,7 +490,7 @@
             }
         }
 
-        // --- METEOR SINIFI ---
+        
         class Meteor {
             constructor() {
                 this.active = false;
@@ -626,9 +616,7 @@
         animate();
 
 
-        /**
-         * 2. BÖLÜM: SES EFEKTİ
-         */
+        
         function playWarpSound(durationSec) {
             try {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -676,9 +664,7 @@
         }
 
 
-        /**
-         * 3. BÖLÜM: GİRİŞ VE SAYAÇ
-         */
+       
         const TARGET_PASSWORD = "yıldızlarınkavuşması"; 
         const SECRET_MSG_CODES = [89, 246, 114, 252, 110, 103, 101, 108, 101, 114, 105, 109, 105, 122, 32, 107, 101, 115, 105, 351, 116, 105, 287, 105, 110, 100, 101, 44, 32, 98, 117, 32, 107, 105, 108, 105, 116, 32, 97, 231, 305, 108, 97, 99, 97, 107, 46, 46, 46];
 
@@ -689,12 +675,11 @@
             const errorMsg = document.getElementById("login-error");
             
             if (inputVal === TARGET_PASSWORD) {
-                // --- BAŞARILI ---
+               
                 
                 const loginScreen = document.getElementById("login-screen");
                 loginScreen.style.opacity = "0";
                 
-                // Mobilde ses başlatmak için kullanıcı etkileşimi şarttır, burada buton click olduğu için çalışır.
                 playWarpSound(12);
 
                 isWarping = true;
@@ -711,12 +696,10 @@
                     document.body.classList.remove("shaking");
                     loginScreen.style.display = "none";
                     
-                    // --- MÜZİK BAŞLATMA ---
                     const music = document.getElementById("finalMusic");
                     music.volume = 0.5; 
                     music.play().catch(e => console.log("Oynatma hatası (Mobilde etkileşim gerekebilir):", e));
                     
-                    // --- METEORLARI AKTİF ET ---
                     canSpawnMeteors = true;
                     nextMeteorTime = Date.now() + 4000 + Math.random() * 1000;
                     // --------------------------
@@ -736,7 +719,6 @@
                 }, 13000); 
 
             } else {
-                // --- HATALI ---
                 errorMsg.style.opacity = "1";
                 const input = document.getElementById("passwordInput");
                 input.style.borderColor = "#ff4d4d";
@@ -754,7 +736,6 @@
             if (e.key === "Enter") attemptLogin();
         });
 
-        // --- ZAMANLAYICI AYARI ---
         const targetDate = new Date("2031-01-01T00:00:00").getTime(); 
 
         const timerInterval = setInterval(() => {
@@ -764,7 +745,6 @@
 
             if (distance < 0) {
                  clearInterval(timerInterval);
-                 // Mobilde taşmaması için fontu küçülttük
                  document.querySelector(".timer-wrapper").innerHTML = "<div class='time-val' style='font-size:clamp(2rem, 5vw, 3rem)'>VUSLAT</div>";
                  msgBox.innerText = decodeToString(SECRET_MSG_CODES);
                  msgBox.style.filter = "blur(0)";
@@ -791,5 +771,6 @@
 </body>
 
 </html>
+
 
 
