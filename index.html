@@ -22,7 +22,7 @@
             position: relative;
         }
 
-        
+        /* --- ANİMASYONLAR --- */
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             10% { transform: translate(-1px, -2px) rotate(-1deg); }
@@ -36,311 +36,190 @@
             90% { transform: translate(1px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
+        .shaking { animation: shake 0.5s infinite; }
 
-        .shaking {
-            animation: shake 0.5s infinite;
-        }
-
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        #canvas-bg {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0;
+        /* Geliştirilmiş Süzülerek Düşüş */
+        @keyframes fall { 
+            0% { transform: translateY(-10vh) rotate(0deg); }
+            100% { transform: translateY(110vh) rotate(360deg); } 
         }
 
-     
+        /* Premium Salınım (Zikzak yerine yumuşak drift) */
+        @keyframes sway { 
+            0%, 100% { transform: translateX(-15px) rotate(-10deg); } 
+            50% { transform: translateX(15px) rotate(10deg); } 
+        }
+
+        /* --- ARKA PLAN --- */
+        #canvas-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
         #flash-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white;
-            opacity: 0; pointer-events: none; z-index: 10000;
+            background: white; opacity: 0; pointer-events: none; z-index: 10000;
             transition: opacity 1.5s ease;
         }
-
         .vignette {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle, transparent 40%, #000 120%);
             z-index: 2; pointer-events: none;
         }
 
+        /* --- GİRİŞ EKRANI (ŞİFRE: selinim) --- */
         #login-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(5px);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.8s ease;
-            padding: 20px; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px);
+            z-index: 9999; display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease; padding: 20px; 
         }
-
         .login-card { 
-            position: relative;
-            text-align: center; 
-            width: 100%; 
-            max-width: 400px; 
-            padding: 3rem 2rem;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 
-                0 20px 50px rgba(0,0,0, 0.5),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-            transition: transform 0.5s ease;
-            overflow: hidden;
+            position: relative; text-align: center; width: 100%; max-width: 400px; 
+            padding: 3rem 2rem; background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0, 0.5);
+            display: flex; flex-direction: column; align-items: center;
         }
-
-        .login-card::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
-            transform: rotate(30deg);
-            pointer-events: none;
-        }
-
-        .scifi-loader {
-            position: relative;
-            width: 80px; height: 80px;
-            margin: 0 auto 25px;
-        }
-        
-        .ring {
-            position: absolute;
-            border-radius: 50%;
-            border: 2px solid transparent;
-        }
-        
-        .ring:nth-child(1) {
-            top: 0; left: 0; width: 100%; height: 100%;
-            border-top: 2px solid #0ff;
-            animation: spin 2s linear infinite;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-        }
-        
-        .ring:nth-child(2) {
-            top: 15px; left: 15px; width: 50px; height: 50px;
-            border-bottom: 2px solid #c084fc; 
-            animation: spin 3s linear infinite reverse;
-        }
-        
-        .ring:nth-child(3) {
-            top: 35px; left: 35px; width: 10px; height: 10px;
-            background: #fff;
-            animation: pulse 1.5s ease-in-out infinite;
-            box-shadow: 0 0 20px #fff;
-        }
-
+        .scifi-loader { position: relative; width: 80px; height: 80px; margin-bottom: 25px; }
+        .ring { position: absolute; border-radius: 50%; border: 2px solid transparent; }
+        .ring:nth-child(1) { top: 0; left: 0; width: 100%; height: 100%; border-top: 2px solid #0ff; animation: spin 2s linear infinite; }
+        .ring:nth-child(2) { top: 15px; left: 15px; width: 50px; height: 50px; border-bottom: 2px solid #c084fc; animation: spin 3s linear infinite reverse; }
+        .ring:nth-child(3) { top: 35px; left: 35px; width: 10px; height: 10px; background: #fff; animation: pulse 1.5s ease-in-out infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes pulse { 0%, 100% { opacity: 0.5; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
 
-        .login-card h2 {
-            font-family: 'Cinzel', serif;
-            letter-spacing: 4px;
-            margin-bottom: 5px;
-            font-size: clamp(1.2rem, 5vw, 1.6rem); 
-            color: #fff;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
-        }
-        
-        .login-sub { 
-            font-size: 0.75rem; 
-            color: rgba(255, 255, 255, 0.6); 
-            margin-bottom: 30px; 
-            letter-spacing: 2px; 
-            text-transform: uppercase;
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 25px;
-        }
-
         #passwordInput {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: #fff; 
-            text-align: center;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1rem; 
-            padding: 15px; 
-            width: 100%;
-            outline: none; 
-            letter-spacing: 3px;
-            transition: all 0.3s;
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px; color: #fff; text-align: center; font-size: 1rem; 
+            padding: 15px; width: 100%; outline: none; letter-spacing: 3px; margin-bottom: 20px;
         }
-
-        #passwordInput:focus { 
-            border-color: #0ff; 
-            background: rgba(0, 0, 0, 0.5);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2); 
-        }
-
-        /* Buton */
         .login-card button {
-            width: 100%;
-            padding: 15px;
+            width: auto; min-width: 200px; padding: 15px 30px;
             background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 12px;
-            color: #0ff;
-            font-family: 'Montserrat', sans-serif; 
-            font-weight: 600;
-            letter-spacing: 4px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            text-transform: uppercase;
-            font-size: 0.9rem;
+            border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 12px;
+            color: #0ff; font-weight: 600; letter-spacing: 4px; cursor: pointer;
+            transition: all 0.4s ease; text-transform: uppercase;
         }
 
-        .login-card button:hover { 
-            background: #0ff; 
-            color: #000; 
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
-            letter-spacing: 6px; 
-        }
-
-        #login-error {
-            color: #ff4d4d; 
-            font-size: 0.75rem; 
-            letter-spacing: 2px;
-            margin-top: 25px; 
-            opacity: 0; 
-            transition: opacity 0.3s;
-            text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
-        }
-
+        /* --- ANA PANEL --- */
         .glass-card {
-            position: relative; z-index: 10;
-            background: rgba(20, 20, 30, 0.4); 
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            padding: 4rem 3rem; 
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 80px rgba(0,0,0,0.8); 
-            text-align: center; 
-            max-width: 850px; 
-            width: 90%; 
-            
-            opacity: 0; transform: scale(0.9);
-            transition: all 2s ease;
-            display: none; 
+            position: relative; z-index: 10; background: rgba(20, 20, 30, 0.4); 
+            backdrop-filter: blur(15px); padding: 4rem 3rem; border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1); text-align: center; 
+            max-width: 850px; width: 90%; opacity: 0; transform: scale(0.9);
+            transition: all 2s ease; display: none; 
+        }
+        .glass-card.active { animation: float 10s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        
+        .timer-wrapper { display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; flex-wrap: wrap; }
+        .time-val { font-family: 'Cinzel', serif; font-size: clamp(1.8rem, 5vw, 3.2rem); text-shadow: 0 0 20px rgba(100, 150, 255, 0.6); }
+
+        /* --- PEMBE EVREN --- */
+        #pink-universe {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #ffe4e1 0%, #ffb6c1 50%, #ff69b4 100%);
+            z-index: 20; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; animation: fadeIn 2s ease;
+        }
+        .special-trigger-btn {
+            background: linear-gradient(45deg, rgba(255, 105, 180, 0.2), rgba(0, 255, 255, 0.2));
+            border: 1px solid rgba(255, 255, 255, 0.3); padding: 12px 28px; border-radius: 30px;
+            color: #fff; cursor: pointer; transition: all 0.5s ease; display: inline-flex;
+            align-items: center; gap: 10px; text-transform: uppercase; margin-top: 20px;
+        }
+        .special-trigger-btn:hover { background: #fff; color: #ff69b4; transform: scale(1.05); }
+
+        /* --- PREMİNYUM AKIŞ --- */
+        .falling-item {
+            position: fixed; top: -10vh; pointer-events: none; z-index: 30;
+            animation: fall linear forwards;
+        }
+        .inner-sway { 
+            animation: sway ease-in-out infinite; 
+            display: inline-block;
         }
         
-        .glass-card.active {
-            animation: float 10s ease-in-out infinite;
+        .snow-flake {
+            position: fixed; top: -10vh; pointer-events: none; z-index: 22;
+            background: white; border-radius: 50%; opacity: 0.6; 
+            animation: fall linear forwards;
         }
+        /* --- MOBİL VE TABLET UYUMLULUK AYARLARI --- */
+@media (max-width: 768px) {
+    /* Tablet ve Telefonlar için Genel Alan */
+    .glass-card {
+        padding: 2.5rem 1.5rem; /* Kenar boşluklarını daralt */
+        width: 92%;
+        max-width: none;
+    }
 
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
+    .timer-wrapper {
+        gap: 15px; /* Geri sayım kutularını birbirine yaklaştır */
+        margin-bottom: 30px;
+    }
 
-        h1 {
-            font-family: 'Cinzel', serif; 
-            font-size: clamp(2rem, 6vw, 3.8rem); 
-            letter-spacing: clamp(4px, 1vw, 12px); 
-            margin-bottom: 10px; color: #fff;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
-            line-height: 1.2;
-        }
+    .time-val {
+        font-size: 2.2rem; /* Rakamları biraz küçült */
+    }
 
-        .subtitle {
-            font-size: clamp(0.7rem, 2vw, 0.9rem);
-            color: rgba(200, 220, 255, 0.8);
-            letter-spacing: 2px; 
-            margin-bottom: 40px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            display: inline-block; padding-bottom: 15px;
-            width: 90%;
-        }
+    .time-unit span[style*="font-size:0.6rem"] {
+        font-size: 0.5rem !important; /* GÜN, SAAT gibi yazıları küçült */
+    }
 
-        .timer-wrapper { 
-            display: flex; 
-            justify-content: center; 
-            gap: 30px; 
-            margin-bottom: 40px; 
-            flex-wrap: wrap; 
-        }
-        
-        .time-unit { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-width: 60px; 
-        }
-        
-        .time-val { 
-            font-family: 'Cinzel', serif; 
-            font-size: clamp(1.8rem, 5vw, 3.2rem); 
-            text-shadow: 0 0 20px rgba(100, 150, 255, 0.6); 
-        }
-        
-        .time-label { 
-            font-size: 0.6rem; 
-            color: #aab; 
-            letter-spacing: 2px; 
-            margin-top: 5px; 
-        }
+    /* Giriş Kartı */
+    .login-card {
+        padding: 2rem 1.5rem;
+        width: 90%;
+    }
 
-        .capsule-container {
-            margin-top: 10px; padding: 15px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);
-            width: 100%;
-        }
+    #passwordInput {
+        font-size: 0.9rem;
+        padding: 12px;
+        letter-spacing: 2px;
+    }
 
-        .lock-icon { font-size: 1.5rem; margin-bottom: 10px; opacity: 0.8; display: block; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-        .message-blur { 
-            font-family: 'Cinzel', serif; 
-            font-size: clamp(0.8rem, 3vw, 1rem); 
-            color: rgba(255,255,255,0.5); 
-            filter: blur(5px); 
-            transition: all 1.5s ease; 
-            user-select: none;
-            word-wrap: break-word; 
-        }
-        .status-text { font-size: 0.6rem; margin-top: 15px; color: #667; letter-spacing: 2px; }
+    .login-card button {
+        width: 100%; /* Mobilde butonu tam genişlik yap */
+        min-width: unset;
+        font-size: 0.8rem;
+    }
+}
 
-        
-        @media (max-width: 768px) {
-            .glass-card { 
-                padding: 2rem 1.5rem; 
-                width: 95%;
-            }
-            .timer-wrapper { 
-                gap: 15px; 
-            }
-            .login-card {
-                padding: 2rem 1.5rem;
-            }
-            .scifi-loader {
-                width: 60px; height: 60px;
-            }
-            .ring:nth-child(2) {
-                width: 35px; height: 35px; top: 12px; left: 12px;
-            }
-            .ring:nth-child(3) {
-                top: 25px; left: 25px;
-            }
-        }
+@media (max-width: 480px) {
+    /* Çok Küçük Telefonlar İçin */
+    .timer-wrapper {
+        gap: 10px;
+    }
 
-        @media (max-width: 480px) {
-            h1 { letter-spacing: 2px; }
-            .timer-wrapper { gap: 10px; }
-            .time-unit { min-width: auto; }
-            .login-card h2 { letter-spacing: 2px; }
-            #passwordInput { letter-spacing: 1px; font-size: 0.9rem; }
-        }
+    .time-val {
+        font-size: 1.8rem;
+    }
+
+    h1 {
+        font-size: 1.5rem !important;
+    }
+
+    #pink-universe p {
+        letter-spacing: 3px !important; /* Çok uzun harf arası mobilde kelimeyi böler */
+        font-size: 0.7rem !important;
+    }
+
+    .special-trigger-btn {
+        padding: 10px 20px;
+        font-size: 0.7rem;
+    }
+}
+
+/* Cihaz yan çevrildiğinde (Landscape) taşmayı önlemek için */
+@media (max-height: 500px) and (orientation: landscape) {
+    .glass-card {
+        padding: 1rem;
+        transform: scale(0.85);
+    }
+    .scifi-loader {
+        display: none; /* Yan ekranda yer açmak için logoyu gizle */
+    }
+}
     </style>
 </head>
 <body>
@@ -350,427 +229,201 @@
     <div class="vignette"></div>
 
     <audio id="finalMusic" src="yıldız.mp3" loop preload="auto"></audio>
+    <audio id="bizimMusic" src="bizim.mp3" loop preload="auto"></audio>
 
     <div id="login-screen">
-        <div class="login-card" id="loginCardUI">
-            <div class="scifi-loader">
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="ring"></div>
-            </div>
-
-            <h2>BAĞLANTI</h2>
-            <p class="login-sub">Güvenlik Protokolü</p>
-            
-            <div class="input-group">
-                <input type="password" id="passwordInput" placeholder="PAROLA" autocomplete="off">
-            </div>
-            
+        <div class="login-card">
+            <div class="scifi-loader"><div class="ring"></div><div class="ring"></div><div class="ring"></div></div>
+            <h2 style="font-family:'Cinzel'; letter-spacing:4px;">BAĞLANTI</h2>
+            <p style="font-size:0.7rem; color:rgba(255,255,255,0.5); margin-bottom:25px; letter-spacing:2px;">GÜVENLİK PROTOKOLÜ</p>
+            <input type="password" id="passwordInput" placeholder="PAROLA" autocomplete="off">
             <button onclick="attemptLogin()">Sisteme Gir</button>
-            
-            <p id="login-error">ERİŞİM REDDEDİLDİ</p>
+            <p id="login-error" style="color:#ff4d4d; font-size:0.75rem; margin-top:20px; opacity:0; transition:0.3s;">ERİŞİM REDDEDİLDİ</p>
         </div>
     </div>
 
     <div class="glass-card">
-        <h1>YÖRÜNGE</h1>
-        
-        <p class="subtitle">
-            Bu bir geri sayım değil…<br>
-            <span class="hope-text">Bu, ihtimallerin sessiz bekleyişi.</span>
-        </p>
+        <h1 style="font-family:'Cinzel';">YÖRÜNGE</h1>
+        <p style="margin-bottom:20px; color:rgba(200, 220, 255, 0.7); font-size: 0.9rem;">Bu bir geri sayım değil… Bu, ihtimallerin sessiz bekleyişi.</p>
 
         <div class="timer-wrapper">
-            <div class="time-unit">
-                <span id="days" class="time-val">00</span>
-                <span class="time-label">GÜN</span>
-            </div>
-            <div class="time-unit">
-                <span id="hours" class="time-val">00</span>
-                <span class="time-label">SAAT</span>
-            </div>
-            <div class="time-unit">
-                <span id="minutes" class="time-val">00</span>
-                <span class="time-label">DAK</span>
-            </div>
-            <div class="time-unit">
-                <span id="seconds" class="time-val">00</span>
-                <span class="time-label">SAN</span>
-            </div>
+            <div class="time-unit"><span id="days" class="time-val">00</span><span style="font-size:0.6rem; display:block;">GÜN</span></div>
+            <div class="time-unit"><span id="hours" class="time-val">00</span><span style="font-size:0.6rem; display:block;">SAAT</span></div>
+            <div class="time-unit"><span id="minutes" class="time-val">00</span><span style="font-size:0.6rem; display:block;">DAK</span></div>
+            <div class="time-unit"><span id="seconds" class="time-val">00</span><span style="font-size:0.6rem; display:block;">SAN</span></div>
         </div>
 
-        <div class="capsule-container">
-            <span class="lock-icon">🔒</span>
-            <div class="message-blur" id="secret-message-box">
-                ▓▒░ ΛCCΞSS DΞNIΞD ░▒▓
-            </div>
-            <p class="status-text">Kapsül Kapalı</p>
+        <div style="background:rgba(0,0,0,0.2); padding:20px; border-radius:16px; border:1px solid rgba(255,255,255,0.05);">
+            <span style="display:block; font-size:1.2rem; margin-bottom:10px; opacity:0.5;">🔒</span>
+            <div id="secret-message-box" style="filter:blur(5px); font-family:'Cinzel'; color:rgba(255,255,255,0.4); font-size:0.8rem;">▓▒░ ΛCCΞSS DΞNIΞD ░▒▓</div>
+            <button class="special-trigger-btn" onclick="startBizimExperience()"><span>💖</span> BİZİM DÜNYAMIZ <span>✨</span></button>
         </div>
     </div>
 
+    <div id="pink-universe">
+        <h2 style="font-family:'Cinzel'; color:#fff; font-size:clamp(1.8rem, 6vw, 3.5rem); text-shadow:0 0 25px rgba(255,255,255,0.7); margin-bottom:15px;">SENİ SEVİYORUM</h2>
+        <p style="letter-spacing:6px; font-weight:300; opacity:0.8; font-size:0.8rem;">SONSUZ BİR İHTİMALİN İÇİNDE...</p>
+    </div>
+
     <script>
-        
+        // --- STARFIELD ---
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
-        
-        let width, height;
-        let stars = [];
-        let meteors = []; 
-        let warpSpeed = 0; 
-        let baseSpeed = 2; 
-        let targetSpeed = baseSpeed; 
-        let isWarping = false; 
-        let canSpawnMeteors = false; 
-        let nextMeteorTime = 0; 
+        let width, height, stars = [], warpSpeed = 0, baseSpeed = 2, isWarping = false;
 
-        const numStars = 800;
-        let cx, cy;
+        function resizeCanvas() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
 
-        function resizeCanvas() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-            cx = width / 2;
-            cy = height / 2;
-        }
-        
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        
         class Star {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.x = (Math.random() - 0.5) * width * 2; 
-                this.y = (Math.random() - 0.5) * height * 2;
-                this.z = Math.random() * width; 
-                this.pz = this.z; 
-            }
-
+            constructor() { this.reset(); }
+            reset() { this.x = (Math.random() - 0.5) * width * 2; this.y = (Math.random() - 0.5) * height * 2; this.z = Math.random() * width; }
             update() {
-                this.z -= (warpSpeed > 0 ? warpSpeed : baseSpeed);
-                if (this.z < 1) {
-                    this.reset();
-                    this.z = width;
-                    this.pz = this.z;
-                }
+                this.z -= (isWarping ? warpSpeed : baseSpeed);
+                if (this.z < 1) { this.reset(); this.z = width; }
             }
-
             draw() {
-                let sx = cx + (this.x / this.z) * cx;
-                let sy = cy + (this.y / this.z) * cy;
-                let px = cx + (this.x / this.pz) * cx;
-                let py = cy + (this.y / this.pz) * cy;
-
-                this.pz = this.z; 
-
-                if (sx > 0 && sx < width && sy > 0 && sy < height) {
-                    const depth = (1 - this.z / width); 
-                    const size = depth * (isWarping ? 4 : 2); 
-                    const alpha = depth; 
-
-                    ctx.beginPath();
-                    
-                    if (isWarping && warpSpeed > 10) {
-                        ctx.strokeStyle = "rgba(200, 240, 255, " + alpha + ")";
-                        ctx.lineWidth = size;
-                        ctx.moveTo(px, py);
-                        ctx.lineTo(sx, sy);
-                        ctx.stroke();
-                    } else {
-                        ctx.fillStyle = "rgba(255, 255, 255, " + alpha + ")";
-                        ctx.arc(sx, sy, size, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                }
+                let sx = (width/2) + (this.x / this.z) * (width/2);
+                let sy = (height/2) + (this.y / this.z) * (height/2);
+                const depth = (1 - this.z / width);
+                ctx.fillStyle = `rgba(255, 255, 255, ${depth})`;
+                ctx.beginPath(); ctx.arc(sx, sy, depth * (isWarping ? 3 : 1.5), 0, Math.PI * 2); ctx.fill();
             }
         }
-
-        
-        class Meteor {
-            constructor() {
-                this.active = false;
-                this.x = 0;
-                this.y = 0;
-                this.vx = 0;
-                this.vy = 0;
-                this.alpha = 0;
-                this.length = 0;
-            }
-
-            spawn() {
-                this.active = true;
-                this.alpha = 1;
-                this.length = Math.random() * 200 + 150; 
-                
-                const side = Math.floor(Math.random() * 4);
-
-                if(side === 0) { 
-                    this.x = Math.random() * width;
-                    this.y = -100;
-                    this.vx = (Math.random() - 0.5) * 15;
-                    this.vy = Math.random() * 10 + 10;
-                } 
-                else if(side === 1) { 
-                    this.x = width + 100;
-                    this.y = Math.random() * height;
-                    this.vx = -(Math.random() * 10 + 15);
-                    this.vy = (Math.random() - 0.5) * 15;
-                }
-                else if(side === 2) { 
-                    this.x = Math.random() * width;
-                    this.y = height + 100;
-                    this.vx = (Math.random() - 0.5) * 15;
-                    this.vy = -(Math.random() * 10 + 10);
-                }
-                else { 
-                    this.x = -100;
-                    this.y = Math.random() * height;
-                    this.vx = Math.random() * 10 + 15;
-                    this.vy = (Math.random() - 0.5) * 15;
-                }
-            }
-
-            update() {
-                if(!this.active) return;
-
-                this.x += this.vx;
-                this.y += this.vy;
-                this.alpha -= 0.008; 
-
-                if(this.x < -this.length - 200 || this.x > width + this.length + 200 || 
-                   this.y < -this.length - 200 || this.y > height + this.length + 200 || 
-                   this.alpha <= 0) {
-                    this.active = false;
-                }
-            }
-
-            draw() {
-                if(!this.active) return;
-                
-                const tailX = this.x - this.vx * (this.length / 25); 
-                const tailY = this.y - this.vy * (this.length / 25);
-
-                const gradient = ctx.createLinearGradient(this.x, this.y, tailX, tailY);
-                gradient.addColorStop(0, `rgba(255, 255, 255, ${this.alpha})`);
-                gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
-
-                ctx.beginPath();
-                ctx.strokeStyle = gradient;
-                ctx.lineWidth = 2;
-                ctx.moveTo(this.x, this.y);
-                ctx.lineTo(tailX, tailY);
-                ctx.stroke();
-
-                ctx.beginPath();
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < numStars; i++) {
-            stars.push(new Star());
-        }
-        
-        for (let i = 0; i < 3; i++) {
-            meteors.push(new Meteor());
-        }
+        for (let i = 0; i < 600; i++) stars.push(new Star());
 
         function animate() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
-            ctx.fillRect(0, 0, width, height);
-
-            if (isWarping) {
-                if (warpSpeed < 100) warpSpeed += 0.5;
-            } else {
-                if (warpSpeed > baseSpeed) warpSpeed *= 0.95;
-            }
-
-            stars.forEach(star => {
-                star.update();
-                star.draw();
-            });
-
-            if (canSpawnMeteors && !isWarping) {
-                if(Date.now() > nextMeteorTime) {
-                    const m = meteors.find(meteor => !meteor.active);
-                    if(m) {
-                        m.spawn();
-                        nextMeteorTime = Date.now() + 4000 + Math.random() * 1000;
-                    }
-                }
-            }
-
-            meteors.forEach(m => {
-                m.update();
-                m.draw();
-            });
-
+            ctx.fillStyle = "rgba(0, 0, 0, 0.4)"; ctx.fillRect(0, 0, width, height);
+            if (isWarping && warpSpeed < 100) warpSpeed += 0.5;
+            else if (!isWarping && warpSpeed > baseSpeed) warpSpeed *= 0.95;
+            stars.forEach(s => { s.update(); s.draw(); });
             requestAnimationFrame(animate);
         }
         animate();
 
-
-        
+        // --- WARP SESİ ---
         function playWarpSound(durationSec) {
             try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return; 
-                
-                const actx = new AudioContext();
-                actx.resume(); 
-                
-                const duration = durationSec;
-                const bufferSize = actx.sampleRate * duration;
-                const buffer = actx.createBuffer(1, bufferSize, actx.sampleRate);
+                const actx = new (window.AudioContext || window.webkitAudioContext)();
+                const buffer = actx.createBuffer(1, actx.sampleRate * durationSec, actx.sampleRate);
                 const data = buffer.getChannelData(0);
-                
-                let lastOut = 0; 
-                
-                for (let i = 0; i < bufferSize; i++) {
-                    const white = Math.random() * 2 - 1;
+                let lastOut = 0;
+                for (let i = 0; i < buffer.length; i++) {
+                    let white = Math.random() * 2 - 1;
                     data[i] = (lastOut + (0.02 * white)) / 1.02;
                     lastOut = data[i];
-                    data[i] *= 3.5; 
+                    data[i] *= 3.5;
                 }
-
                 const noise = actx.createBufferSource();
                 noise.buffer = buffer;
-
                 const filter = actx.createBiquadFilter();
                 filter.type = 'lowpass';
-                filter.frequency.value = 100;
-
-                const gainNode = actx.createGain();
-                gainNode.gain.setValueAtTime(0, actx.currentTime);
-                gainNode.gain.linearRampToValueAtTime(0.8, actx.currentTime + 2); 
-                gainNode.gain.linearRampToValueAtTime(0.8, actx.currentTime + duration - 2); 
-                gainNode.gain.linearRampToValueAtTime(0, actx.currentTime + duration); 
-
-                filter.frequency.linearRampToValueAtTime(1000, actx.currentTime + 3); 
-                filter.frequency.linearRampToValueAtTime(100, actx.currentTime + duration); 
-
-                noise.connect(filter);
-                filter.connect(gainNode);
-                gainNode.connect(actx.destination);
-                
+                const gain = actx.createGain();
+                gain.gain.setValueAtTime(0, actx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.8, actx.currentTime + 2);
+                gain.gain.linearRampToValueAtTime(0, actx.currentTime + durationSec);
+                noise.connect(filter); filter.connect(gain); gain.connect(actx.destination);
                 noise.start();
-            } catch (e) { console.error("Ses hatası:", e); }
+            } catch (e) { console.error("Ses motoru hatası:", e); }
         }
 
-
-       
-        const TARGET_PASSWORD = "yıldızlarınkavuşması"; 
-        const SECRET_MSG_CODES = [89, 246, 114, 252, 110, 103, 101, 108, 101, 114, 105, 109, 105, 122, 32, 107, 101, 115, 105, 351, 116, 105, 287, 105, 110, 100, 101, 44, 32, 98, 117, 32, 107, 105, 108, 105, 116, 32, 97, 231, 305, 108, 97, 99, 97, 107, 46, 46, 46];
-
-        function decodeToString(codes) { return String.fromCharCode(...codes); }
-
+        // --- GİRİŞ SİSTEMİ ---
         function attemptLogin() {
-            const inputVal = document.getElementById("passwordInput").value.toLowerCase().trim();
-            const errorMsg = document.getElementById("login-error");
-            
-            if (inputVal === TARGET_PASSWORD) {
-               
-                
-                const loginScreen = document.getElementById("login-screen");
-                loginScreen.style.opacity = "0";
-                
-                playWarpSound(12);
-
-                isWarping = true;
-                
-                document.body.classList.add("shaking");
-
+            const pass = document.getElementById("passwordInput").value.toLowerCase().trim();
+            if (pass === "selinim") {
+                document.getElementById("login-screen").style.opacity = "0";
+                playWarpSound(12); 
+                isWarping = true; document.body.classList.add("shaking");
+                setTimeout(() => { document.getElementById("flash-overlay").style.opacity = "1"; }, 11500);
                 setTimeout(() => {
-                    const flash = document.getElementById("flash-overlay");
-                    flash.style.opacity = "1"; 
-                }, 11500);
-
-                setTimeout(() => {
-                    isWarping = false; 
-                    document.body.classList.remove("shaking");
-                    loginScreen.style.display = "none";
-                    
-                    const music = document.getElementById("finalMusic");
-                    music.volume = 0.5; 
-                    music.play().catch(e => console.log("Oynatma hatası (Mobilde etkileşim gerekebilir):", e));
-                    
-                    canSpawnMeteors = true;
-                    nextMeteorTime = Date.now() + 4000 + Math.random() * 1000;
-                    // --------------------------
-
-                    const mainCard = document.querySelector(".glass-card");
-                    mainCard.style.display = "block";
-                    
-                    const flash = document.getElementById("flash-overlay");
-                    flash.style.opacity = "0";
-
-                    setTimeout(() => {
-                        mainCard.style.opacity = "1";
-                        mainCard.style.transform = "scale(1)";
-                        mainCard.classList.add("active");
-                    }, 500);
-
-                }, 13000); 
-
+                    isWarping = false; document.body.classList.remove("shaking");
+                    document.getElementById("login-screen").style.display = "none";
+                    document.getElementById("finalMusic").play();
+                    const mc = document.querySelector(".glass-card");
+                    mc.style.display = "block"; document.getElementById("flash-overlay").style.opacity = "0";
+                    setTimeout(() => { mc.style.opacity = "1"; mc.style.transform = "scale(1)"; mc.classList.add("active"); }, 500);
+                }, 13000);
             } else {
-                errorMsg.style.opacity = "1";
-                const input = document.getElementById("passwordInput");
-                input.style.borderColor = "#ff4d4d";
-                input.style.transform = "translateX(10px)";
-                setTimeout(() => input.style.transform = "translateX(-10px)", 100);
-                setTimeout(() => input.style.transform = "translateX(0)", 200);
-                setTimeout(() => {
-                    errorMsg.style.opacity = "0";
-                    input.style.borderColor = "rgba(255, 255, 255, 0.1)"; 
-                }, 2000);
+                document.getElementById("login-error").style.opacity = "1";
+                setTimeout(() => document.getElementById("login-error").style.opacity = "0", 2000);
             }
         }
 
-        document.getElementById("passwordInput").addEventListener("keypress", function(e) {
-            if (e.key === "Enter") attemptLogin();
-        });
+        // --- PREMİNYUM PEMBE EVREN GEÇİŞİ ---
+        let experienceActive = false;
+        function startBizimExperience() {
+            if(experienceActive) return;
+            experienceActive = true;
+            document.querySelector(".glass-card").style.opacity = "0";
+            setTimeout(() => {
+                document.querySelector(".glass-card").style.display = "none";
+                document.getElementById("canvas-bg").style.display = "none";
+                document.getElementById("pink-universe").style.display = "flex";
+            }, 1000);
 
-        const targetDate = new Date("2031-01-01T00:00:00").getTime(); 
+            document.getElementById("finalMusic").pause();
+            const bm = document.getElementById("bizimMusic");
+            bm.volume = 0.5; bm.play();
 
-        const timerInterval = setInterval(() => {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-            const msgBox = document.getElementById("secret-message-box");
+            setInterval(createYumosHeart, 500); 
+            setInterval(createSnowFlake, 300);
+        }
 
-            if (distance < 0) {
-                 clearInterval(timerInterval);
-                 document.querySelector(".timer-wrapper").innerHTML = "<div class='time-val' style='font-size:clamp(2rem, 5vw, 3rem)'>VUSLAT</div>";
-                 msgBox.innerText = decodeToString(SECRET_MSG_CODES);
-                 msgBox.style.filter = "blur(0)";
-                 msgBox.style.color = "#fff";
-                 msgBox.style.textShadow = "0 0 15px rgba(255,255,255,0.8)";
-                 document.querySelector(".lock-icon").innerText = "🔓";
-                 document.querySelector(".status-text").innerText = "ERİŞİM İZNİ VERİLDİ";
-                 document.querySelector(".status-text").style.color = "#4ff";
-                 return;
-            }
+        function createYumosHeart() {
+            const symbols = ['❤️', '💖', '🎀', '💝', '🤍'];
+            const container = document.createElement('div');
+            container.className = 'falling-item';
+            const inner = document.createElement('span');
+            inner.className = 'inner-sway';
+            inner.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            
+            container.appendChild(inner);
+            
+            const size = Math.random() * 8 + 12; 
+            const duration = Math.random() * 5 + 8; // Daha yavaş süzülme
+            const leftPos = Math.random() * 100;
 
-            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((distance % (1000 * 60)) / 1000);
+            container.style.left = leftPos + 'vw';
+            container.style.fontSize = size + 'px';
+            container.style.opacity = Math.random() * 0.5 + 0.4;
+            container.style.filter = `blur(${Math.random() * 1}px)`;
+            container.style.animationDuration = duration + 's';
+            
+            // Salınım süresini ve gecikmesini randomize ederek senkronizasyonu bozuyoruz (daha doğal durur)
+            inner.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            inner.style.animationDelay = (Math.random() * 2) + 's';
 
-            document.getElementById('days').innerText = d < 10 ? '0'+d : d;
-            document.getElementById('hours').innerText = h < 10 ? '0'+h : h;
-            document.getElementById('minutes').innerText = m < 10 ? '0'+m : m;
-            document.getElementById('seconds').innerText = s < 10 ? '0'+s : s;
+            document.body.appendChild(container);
+            setTimeout(() => container.remove(), duration * 1000);
+        }
+
+        function createSnowFlake() {
+            const flake = document.createElement('div');
+            flake.className = 'snow-flake';
+            const size = Math.random() * 4 + 2 + 'px';
+            const duration = Math.random() * 6 + 10; // Karlar daha da yavaş
+
+            flake.style.width = size; flake.style.height = size;
+            flake.style.left = Math.random() * 100 + 'vw';
+            flake.style.opacity = Math.random() * 0.6 + 0.2;
+            flake.style.animationDuration = duration + 's';
+            flake.style.filter = "blur(1px)";
+
+            document.body.appendChild(flake);
+            setTimeout(() => flake.remove(), duration * 1000);
+        }
+
+        // GERI SAYIM
+        const target = new Date("2031-01-01T00:00:00").getTime();
+        setInterval(() => {
+            const dist = target - new Date().getTime();
+            if (dist < 0) return;
+            document.getElementById('days').innerText = String(Math.floor(dist / 86400000)).padStart(2, '0');
+            document.getElementById('hours').innerText = String(Math.floor((dist % 86400000) / 3600000)).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(Math.floor((dist % 3600000) / 60000)).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(Math.floor((dist % 60000) / 1000)).padStart(2, '0');
         }, 1000);
 
+        document.getElementById("passwordInput").addEventListener("keypress", (e) => { if(e.key === "Enter") attemptLogin(); });
     </script>
 </body>
-
 </html>
-
-
-
