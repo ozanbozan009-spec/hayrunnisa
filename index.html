@@ -254,11 +254,19 @@
         </div>
 
         <div style="background:rgba(0,0,0,0.2); padding:20px; border-radius:16px; border:1px solid rgba(255,255,255,0.05);">
-            <span style="display:block; font-size:1.2rem; margin-bottom:10px; opacity:0.5;">🔒</span>
-            <div id="secret-message-box" style="filter:blur(5px); font-family:'Cinzel'; color:rgba(255,255,255,0.4); font-size:0.8rem;">▓▒░ ΛCCΞSS DΞNIΞD ░▒▓</div>
-            <button class="special-trigger-btn" onclick="startBizimExperience()"><span>💖</span> BİZİM DÜNYAMIZ <span>✨</span></button>
-        </div>
+    <span style="display:block; font-size:1.2rem; margin-bottom:10px; opacity:0.5;">🔒</span>
+    <div id="secret-message-box" style="filter:blur(5px); font-family:'Cinzel'; color:rgba(255,255,255,0.4); font-size:0.8rem; margin-bottom: 15px;">▓▒░ ΛCCΞSS DΞNIΞD ░▒▓</div>
+    
+    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <button class="special-trigger-btn" onclick="startBizimExperience()">
+            <span>💖</span> BİZİM DÜNYAMIZ <span>✨</span>
+        </button>
+        
+        <button class="special-trigger-btn" onclick="window.location.href='bulut.html'">
+            <span>☁️</span> GÖKYÜZÜNDE BEŞ YIL <span>⭐</span>
+        </button>
     </div>
+</div>
 
     <div id="pink-universe">
         <h2 style="font-family:'Cinzel'; color:#fff; font-size:clamp(1.8rem, 6vw, 3.5rem); text-shadow:0 0 25px rgba(255,255,255,0.7); margin-bottom:15px;">SENİ SEVİYORUM</h2>
@@ -388,7 +396,7 @@
             container.style.filter = `blur(${Math.random() * 1}px)`;
             container.style.animationDuration = duration + 's';
             
-            // Salınım süresini ve gecikmesini randomize ederek senkronizasyonu bozuyoruz (daha doğal durur)
+        
             inner.style.animationDuration = (Math.random() * 3 + 3) + 's';
             inner.style.animationDelay = (Math.random() * 2) + 's';
 
@@ -412,7 +420,7 @@
             setTimeout(() => flake.remove(), duration * 1000);
         }
 
-        // GERI SAYIM
+        
         const target = new Date("2031-01-01T00:00:00").getTime();
         setInterval(() => {
             const dist = target - new Date().getTime();
@@ -427,3 +435,4 @@
     </script>
 </body>
 </html>
+
