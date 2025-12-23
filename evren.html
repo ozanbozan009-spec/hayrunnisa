@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Senin Evrenin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* --- TEMEL AYARLAR --- */
+    * { box-sizing: border-box; margin: 0; padding: 0; cursor: default; user-select: none; -webkit-tap-highlight-color: transparent; }
+    
+    body {
+      min-height: 100vh; overflow: hidden;
+      background: #000;
+      font-family: 'Poppins', sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+
+    /* --- GİRİŞ METİNLERİ --- */
+    #text-sequence-container {
+        position: fixed; inset: 0; z-index: 20000;
+        background: radial-gradient(circle, #1a0510 0%, #000000 100%);
+        display: flex; 
+        align-items: center; justify-content: center;
+        pointer-events: none;
+        padding: 0 20px;
+    }
+
+    .seq-text {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 300; 
+        font-size: 28px;
+        letter-spacing: 4px;
+        opacity: 0;
+        transition: opacity 1.5s ease, transform 4s ease;
+    }
+
+    .final-sentence {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 45px; 
+        font-weight: 700; 
+        color: #fff;
+        letter-spacing: 2px;
+        text-shadow: none;
+    }
+    
+    .exploding-text {
+        animation: textExplode 0.5s forwards ease-out;
+    }
+    
+    @keyframes textExplode {
+        0% { transform: scale(1); opacity: 1; letter-spacing: 2px; filter: blur(0); }
+        50% { transform: scale(2); opacity: 0.5; letter-spacing: 20px; filter: blur(5px); }
+        100% { transform: scale(4); opacity: 0; letter-spacing: 50px; filter: blur(20px); }
+    }
+
+    #white-flash {
+        position: fixed; inset: 0; z-index: 25000;
+        background: #fff;
+        opacity: 0; pointer-events: none;
+        transition: opacity 3s ease-out;
+    }
+
+    /* --- ANA EVREN --- */
+    #ultimate-universe { 
+        position: fixed; inset: 0; z-index: 15000; 
+        background: radial-gradient(ellipse at center, #4a0032 0%, #1a0014 60%, #000 100%); 
+        display: none; 
+        flex-direction: column; align-items: center; justify-content: center; 
+        overflow: hidden; perspective: 1000px; 
+        opacity: 0; transition: opacity 4s ease; 
+    }
+    #ultimate-universe.visible { display: flex; opacity: 1; }
+    
+    .bg-star {
+        position: absolute; background: #fff; border-radius: 50%; opacity: 0; z-index: -1;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); animation: softRise linear infinite;
+    }
+    @keyframes softRise {
+        0% { transform: translateY(0); opacity: 0; }
+        20% { opacity: var(--star-opacity); }
+        80% { opacity: var(--star-opacity); }
+        100% { transform: translateY(-100vh); opacity: 0; }
+    }
+    
+    .cosmic-core { 
+        position: relative; width: 120px; height: 120px; 
+        display: flex; align-items: center; justify-content: center; 
+        cursor: pointer; z-index: 100; transition: transform 0.3s ease; 
+        touch-action: manipulation;
+    }
+    .cosmic-core:active { transform: scale(0.95); }
+    
+    .premium-heart { position: relative; width: 100px; height: 90px; animation: premiumPulse 1.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1); }
+    .premium-heart::before, .premium-heart::after { content: ""; position: absolute; top: 0; width: 52px; height: 80px; border-radius: 50px 50px 0 0; background: linear-gradient(to bottom, #ff69b4, #ff1493); box-shadow: 0 0 20px rgba(255, 20, 147, 0.8), 0 0 40px rgba(255, 20, 147, 0.4); }
+    .premium-heart::before { left: 50px; transform: rotate(-45deg); transform-origin: 0 100%; }
+    .premium-heart::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
+    @keyframes premiumPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 10px #ff1493); } 50% { transform: scale(1.15); filter: drop-shadow(0 0 30px #ff1493); } 100% { transform: scale(1); filter: drop-shadow(0 0 10px #ff1493); } }
+    
+    .click-hint { position: absolute; bottom: -50px; width: 200px; text-align: center; color: #ffb6c1; font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; opacity: 0.8; animation: fadeInOut 2s infinite; pointer-events: none; }
+    @keyframes fadeInOut { 0%, 100% { opacity: 0.4; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-3px); } }
+
+    /* --- YÖRÜNGE SİSTEMİ (Wrapper ile Düzenlendi) --- */
+    /* Bu wrapper, sistemi mobilde küçültmek için kullanılır, dönmeyi etkilemez */
+    #orbit-wrapper {
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 0; height: 0;
+        display: flex; align-items: center; justify-content: center;
+        transform-style: preserve-3d;
+    }
+
+    .orbit-system { 
+        position: absolute; width: 800px; height: 800px; 
+        /* Tam ortalamak için marginler */
+        top: 50%; left: 50%; margin-top: -400px; margin-left: -400px;
+        transform-style: preserve-3d; 
+        animation: systemRotate 60s linear infinite; 
+    }
+    
+    .orbit-system.paused { animation-play-state: paused !important; }
+    
+    @keyframes systemRotate { 
+        from { transform: rotateX(60deg) rotateZ(0deg); } 
+        to { transform: rotateX(60deg) rotateZ(360deg); } 
+    }
+    
+    .orbit-ring { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 0 15px rgba(255, 20, 147, 0.1); }
+    .ring-1 { width: 350px; height: 350px; } .ring-2 { width: 550px; height: 550px; } .ring-3 { width: 750px; height: 750px; }
+    
+    /* YILDIZLAR VE ETİKETLER */
+    .feature-star { 
+        position: absolute; 
+        width: 8px; height: 8px; 
+        background: #fff; border-radius: 50%; 
+        box-shadow: 0 0 15px #fff, 0 0 30px #ff69b4; 
+        cursor: pointer; transform-style: preserve-3d; 
+        animation: counterRotate 60s linear infinite; transition: all 0.4s ease; 
+    }
+    @keyframes counterRotate { from { transform: rotateZ(360deg) rotateX(-60deg); } to { transform: rotateZ(0deg) rotateX(-60deg); } }
+    
+    .feature-star::before, .feature-star::after { content: ""; position: absolute; top: 50%; left: 50%; background: #fff; transform: translate(-50%, -50%); border-radius: 50%; box-shadow: 0 0 10px #fff; transition: transform 0.3s ease; }
+    .feature-star::before { width: 2px; height: 20px; } .feature-star::after { width: 20px; height: 2px; }
+    
+    .orbit-system.paused .feature-star { animation-play-state: paused; }
+    .feature-star:hover { z-index: 200; box-shadow: 0 0 20px #fff, 0 0 40px #ff69b4; }
+    .feature-star:hover::before, .feature-star:hover::after { transform: translate(-50%, -50%) scale(1.5); }
+    
+    .feature-star.active { background: #fff; z-index: 500; box-shadow: 0 0 30px #fff, 0 0 60px #ff1493; }
+    .feature-star.active::before, .feature-star.active::after { transform: translate(-50%, -50%) scale(2.0); }
+    
+    .star-label { 
+        position: absolute; left: 50%; bottom: 35px;
+        white-space: nowrap; transform: translateX(-50%); 
+        background: #fff; color: #d6006e; 
+        padding: 12px 24px; border-radius: 30px; 
+        font-weight: 800; font-size: 16px; 
+        border: 3px solid #ff69b4; box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
+        opacity: 0; transition: all 0.3s ease; pointer-events: none; 
+        z-index: 1000; font-family: "Montserrat", sans-serif; 
+    }
+    .star-label::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -8px; border-width: 8px; border-style: solid; border-color: #ff69b4 transparent transparent transparent; }
+    .feature-star.active .star-label { opacity: 1; bottom: 50px; transform: translateX(-50%) scale(1.1); }
+    
+    .fs-1 { top: 10%; left: 50%; } .fs-2 { bottom: 15%; left: 50%; } .fs-3 { top: 50%; left: 5%; } .fs-4 { top: 50%; right: 5%; } .fs-5 { top: 20%; right: 20%; } .fs-6 { bottom: 20%; left: 20%; }
+
+    /* Kayan Yıldızlar */
+    .shooting-star { position: absolute; top: 0; left: 0; width: 250px; height: 3px; background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1) 50%, rgba(255,255,255,0)); transform: rotate(-45deg); opacity: 0; animation: shoot 4s linear; pointer-events: none; }
+    @keyframes shoot { 0% { transform: translate(var(--startX), var(--startY)) rotate(-45deg) scale(0.5); opacity: 1; } 100% { transform: translate(var(--endX), var(--endY)) rotate(-45deg) scale(1); opacity: 0; } }
+    .special-shooting-star { position: absolute; width: 8px; height: 8px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px #fff, 0 0 40px #ff1493; cursor: pointer; animation: shoot 2s linear forwards; animation-play-state: running; z-index: 300; }
+    .special-shooting-star.stopped { animation: pulseStar 1.5s infinite alternate; }
+    .special-shooting-star.stopped::before { content:""; position:absolute; width:2px; height:25px; background:#fff; top:50%; left:50%; transform:translate(-50%,-50%); }
+    .special-shooting-star.stopped::after { content:""; position:absolute; width:25px; height:2px; background:#fff; top:50%; left:50%; transform:translate(-50%,-50%); }
+    @keyframes pulseStar { 0% { transform: scale(1); } 100% { transform: scale(1.4); box-shadow: 0 0 40px #fff, 0 0 80px #ff1493; } }
+
+    /* Mesaj Kutuları */
+    .final-message-container { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(20, 0, 10, 0.9); backdrop-filter: blur(10px); opacity: 0; pointer-events: none; transition: opacity 1s ease; z-index: 500; padding: 20px; text-align: center; }
+    .final-message-container.show { opacity: 1; pointer-events: auto; }
+    .main-title { font-family: "Montserrat", sans-serif; font-weight: 900; font-size: 50px; color: #ff69b4; text-shadow: 0 0 30px #ff1493; margin-bottom: 20px; text-align: center; transform: translateY(20px); transition: transform 1s ease; }
+    .sub-title { font-family: "Montserrat", sans-serif; font-size: 18px; color: #fff; letter-spacing: 4px; text-transform: uppercase; opacity: 0.9; transform: translateY(20px); transition: transform 1s ease 0.3s; }
+    .final-message-container.show .main-title, .final-message-container.show .sub-title { transform: translateY(0); }
+    .close-msg { margin-top: 40px; background: transparent; border: 3px solid #ff69b4; color: #ff69b4; padding: 12px 40px; border-radius: 30px; cursor: pointer; font-size: 18px; transition: 0.3s; font-family: "Montserrat", sans-serif; font-weight: 700; }
+    .close-msg:hover { background: #ff69b4; color: #fff; box-shadow: 0 0 20px #ff1493; }
+    
+    #love-popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: #fff; padding: 40px; border-radius: 30px; text-align: center; max-width: 90%; width: 450px; z-index: 16000; box-shadow: 0 20px 60px rgba(0,0,0,0.5); border: 4px solid #ffb6c1; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    #love-popup.show { transform: translate(-50%, -50%) scale(1); }
+    .love-text { font-family: "Montserrat", sans-serif; font-weight: 700; font-size: 28px; color: #d6006e; margin-bottom: 30px; line-height: 1.4; }
+    .close-love-popup { background: #ff69b4; color: white; border: none; padding: 15px 35px; border-radius: 30px; cursor: pointer; font-family: "Montserrat", sans-serif; font-weight: 700; font-size: 16px; }
+
+    /* --- DİLEK FENERİ --- */
+    .wish-trigger-btn { position: absolute; bottom: 30px; right: 30px; background: rgba(255, 105, 180, 0.2); border: 2px solid #ff69b4; color: #fff; padding: 15px 25px; border-radius: 50px; font-family: 'Montserrat', sans-serif; font-weight: 700; cursor: pointer; z-index: 1000; backdrop-filter: blur(5px); transition: 0.3s; box-shadow: 0 0 15px rgba(255, 105, 180, 0.3); }
+    .wish-trigger-btn:hover { background: #ff69b4; box-shadow: 0 0 30px #ff69b4; transform: scale(1.1); }
+    .wish-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 20000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.5s ease; }
+    .wish-modal.active { opacity: 1; pointer-events: auto; }
+    .wish-content { background: linear-gradient(135deg, #2a0a1a, #000); border: 2px solid #ff69b4; padding: 40px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 0 50px rgba(255, 20, 147, 0.3); transform: scale(0.8); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .wish-modal.active .wish-content { transform: scale(1); }
+    .wish-title { color: #ff69b4; font-family: 'Dancing Script', cursive; font-size: 32px; margin-bottom: 20px; }
+    .wish-input { width: 100%; height: 100px; background: rgba(255,255,255,0.1); border: 1px solid #ff69b4; border-radius: 10px; color: #fff; padding: 10px; font-family: 'Poppins', sans-serif; margin-bottom: 20px; resize: none; outline: none; }
+    .wish-input::placeholder { color: rgba(255,192,203, 0.5); }
+    .send-wish-btn { background: #ff69b4; color: #fff; border: none; padding: 10px 30px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; font-family: 'Montserrat', sans-serif; }
+    .send-wish-btn:hover { background: #d6006e; box-shadow: 0 0 20px #ff1493; }
+    .close-wish-btn { background: transparent; color: #ffb6c1; border: 1px solid #ffb6c1; padding: 8px 20px; border-radius: 20px; margin-left: 10px; cursor: pointer; font-family: 'Montserrat', sans-serif; }
+    .sky-lantern { position: absolute; bottom: -50px; width: 40px; height: 50px; background: radial-gradient(circle, #ffdfba 0%, #ff69b4 100%); border-radius: 10px 10px 5px 5px; box-shadow: 0 0 20px #ff69b4, 0 0 40px #ff4500; opacity: 0.9; z-index: 14000; pointer-events: none; display: flex; align-items: center; justify-content: center; }
+    .sky-lantern::after { content: ""; position: absolute; bottom: -10px; left: 50%; width: 2px; height: 10px; background: rgba(255,255,255,0.5); }
+    @keyframes lanternFloat { 0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; } 10% { opacity: 1; transform: translateY(-100px) translateX(10px) scale(0.8); } 50% { transform: translateY(-50vh) translateX(-20px) scale(1); } 100% { transform: translateY(-120vh) translateX(20px) scale(0.5); opacity: 0; } }
+
+    /* --- RESPONSIVE AYARLAR (DÜZELTİLDİ) --- */
+    
+    @media (max-width: 1024px) {
+        #orbit-wrapper { transform: scale(0.7); }
+    }
+
+    @media (max-width: 768px) {
+        /* DÖNMEYİ BOZMADAN KÜÇÜLTMEK İÇİN WRAPPER KULLANIYORUZ */
+        #orbit-wrapper { 
+            transform: scale(0.42); 
+        }
+
+        /* YAZILARI KURTARMA OPERASYONU */
+        /* Sistem 0.42'ye küçüldüğü için yazıları devasa yapıyoruz ki normal görünsün */
+        .star-label { 
+            font-size: 34px !important; /* Normalde 14-16px, burada büyüttük */
+            padding: 16px 30px;
+            bottom: 60px; /* Yıldızdan biraz daha uzaklaşsın */
+            border-width: 4px;
+            white-space: normal;
+            width: max-content;
+            max-width: 500px; /* Genişlik verelim satır atlasın */
+            text-align: center;
+        }
+
+        /* Aktif olunca konumu */
+        .feature-star.active .star-label {
+            bottom: 80px; 
+            transform: translateX(-50%) scale(1.1); /* Scale'i abartma */
+        }
+        
+        .seq-text { font-size: 20px; letter-spacing: 2px; }
+        .final-sentence { font-size: 32px; letter-spacing: 1px; }
+        .main-title { font-size: 30px; }
+        .sub-title { font-size: 14px; letter-spacing: 2px; }
+        .close-msg { padding: 10px 30px; font-size: 16px; }
+        #love-popup { width: 85%; padding: 25px; }
+        .love-text { font-size: 20px; }
+        .wish-trigger-btn { bottom: 20px; right: 20px; padding: 12px 20px; font-size: 14px; }
+    }
+
+    @media (max-width: 400px) {
+        #orbit-wrapper { transform: scale(0.35); }
+        .seq-text { font-size: 18px; }
+        .main-title { font-size: 26px; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="text-sequence-container">
+    <div id="seq-1" class="seq-text">Önce karanlık vardı...</div>
+    <div id="seq-2" class="seq-text">Sonra bir ışık doğdu...</div>
+    <div id="seq-3" class="seq-text final-sentence">Ve o ışık sendin...</div>
+  </div>
+
+  <div id="white-flash"></div>
+
+  <div id="ultimate-universe">
+    
+    <div class="cosmic-core" onclick="revealMainMessage()">
+      <div class="premium-heart"></div>
+      <div class="click-hint">BANA DOKUN</div>
+    </div>
+
+    <div id="orbit-wrapper">
+        <div class="orbit-system" id="orbit-system">
+        <div class="orbit-ring ring-1"></div> <div class="orbit-ring ring-2"></div> <div class="orbit-ring ring-3"></div>
+        
+        <div class="feature-star fs-1" onclick="toggleStar(this)"><div class="star-label">KAHVERENGİ GÖZLERİN 💓</div></div>
+        <div class="feature-star fs-2" onclick="toggleStar(this)"><div class="star-label">AÇIK KAHVE KAŞLARIN 💓</div></div>
+        <div class="feature-star fs-3" onclick="toggleStar(this)"><div class="star-label">UZUN Kirpiklerin 💓</div></div>
+        <div class="feature-star fs-4" onclick="toggleStar(this)"><div class="star-label">KUMRAL SAÇLARIN 💓</div></div>
+        <div class="feature-star fs-5" onclick="toggleStar(this)"><div class="star-label">O Güzel Kokun 💓</div></div>
+        <div class="feature-star fs-6" onclick="toggleStar(this)"><div class="star-label">BAL DUDAKLARIN 💓</div></div>
+        </div>
+    </div>
+
+    <div class="wish-trigger-btn" onclick="openWishModal()">🏮 Dilek Tut</div>
+
+    <div class="wish-modal" id="wish-modal-overlay">
+        <div class="wish-content">
+            <div class="wish-title">Evrene Bir Mesaj...</div>
+            <textarea class="wish-input" id="wish-text-area" placeholder="İçinden geçen dileği buraya yaz..."></textarea>
+            <div style="display:flex; justify-content:center;">
+                <button class="send-wish-btn" onclick="sendSkyLantern()">Gönder 🚀</button>
+                <button class="close-wish-btn" onclick="closeWishModal()">Vazgeç</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="final-message-container" id="final-msg-overlay">
+      <div class="main-title">Sen Benim Evrenimsin</div>
+      <div class="sub-title">TEK MERKEZİMDESİN</div>
+      <button class="close-msg" onclick="closeMainMessage()">Evrene Dön</button>
+    </div>
+
+    <div id="love-popup">
+      <div class="love-text" id="love-message-text"></div>
+      <button class="close-love-popup" onclick="closeLovePopup()">Kapat 💖</button>
+    </div>
+  </div>
+
+  <script>
+    /* --- SES DOSYALARI --- */
+    /* 1. Arka plan uzay sesi */
+    const universeAudio = new Audio("sounds/sesli.mp3"); 
+    universeAudio.loop = true;
+    universeAudio.volume = 0.2; 
+
+    /* 2. Girişteki gerilim sesi */
+    const tensionAudio = new Audio("sounds/gerilim.mp3"); 
+    tensionAudio.volume = 1.0; 
+
+    /* 3. Kalbe basınca çalacak ÖZEL ŞARKI */
+    const mainSong = new Audio("sounds/evren.mp3");
+    mainSong.loop = true; 
+
+    // --- SAYFA YÜKLENİNCE OTOMATİK BAŞLAT ---
+    window.addEventListener('load', startExperience);
+
+    // --- BAŞLATMA FONKSİYONU ---
+    function startExperience() {
+        const textContainer = document.getElementById('text-sequence-container');
+        
+        const text1 = document.getElementById('seq-1');
+        const text2 = document.getElementById('seq-2');
+        const text3 = document.getElementById('seq-3');
+        const whiteFlash = document.getElementById('white-flash');
+        const universe = document.getElementById('ultimate-universe');
+
+        // Müzikleri Başlatmayı Dene 
+        universeAudio.play().catch(e => console.log("Otomatik oynatma engellendi, etkileşim bekleniyor.", e));
+        tensionAudio.play().catch(e => console.log("Otomatik oynatma engellendi, etkileşim bekleniyor.", e));
+
+        // --- ZAMAN ÇİZELGESİ (12 SANİYE) ---
+
+        // T=1.0s
+        setTimeout(() => {
+            text1.style.opacity = '1';
+            text1.style.transform = 'scale(1.1)';
+        }, 1000);
+
+        // T=3.5s
+        setTimeout(() => {
+            text1.style.opacity = '0';
+            text1.style.transform = 'scale(0.9)';
+        }, 3500);
+
+        // T=4.5s
+        setTimeout(() => {
+            text2.style.opacity = '1';
+            text2.style.transform = 'scale(1.1)';
+        }, 4500);
+
+        // T=7.0s
+        setTimeout(() => {
+            text2.style.opacity = '0';
+            text2.style.transform = 'scale(0.9)';
+        }, 7000);
+
+        // T=8.0s
+        setTimeout(() => {
+            text3.style.opacity = '1';
+            text3.style.transform = 'scale(1.0)';
+        }, 8000);
+
+        // T=9.5s
+        setTimeout(() => {
+             text3.style.transition = "transform 2s ease-in"; 
+             text3.style.transform = "scale(1.4)";
+        }, 9500);
+
+        // T=11.5s
+        setTimeout(() => {
+            text3.classList.add('exploding-text'); 
+            whiteFlash.style.opacity = '1'; 
+        }, 11500);
+
+        // T=12.0s
+        setTimeout(() => {
+            textContainer.style.display = 'none'; 
+            universe.classList.add('visible'); 
+            
+            createDeepStars(); 
+            startShootingStars(); 
+
+            // Beyaz perdeyi kaldır
+            whiteFlash.style.opacity = '0';
+            setTimeout(() => { whiteFlash.style.display = 'none'; }, 3000);
+            
+            fadeInAudio();
+            
+        }, 12000);
+    }
+
+    // Sesi yavaşça açan fonksiyon
+    function fadeInAudio() {
+        if (universeAudio.volume < 1) {
+            universeAudio.volume = Math.min(1, universeAudio.volume + 0.05);
+            setTimeout(fadeInAudio, 200); 
+        }
+    }
+
+    // *** YAVAŞ ARKA PLAN YILDIZLARI ***
+    function createDeepStars() {
+        const universe = document.getElementById('ultimate-universe');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.classList.add('bg-star');
+            star.style.left = Math.random() * 100 + "%";
+            star.style.top = Math.random() * 100 + "%";
+            const size = Math.random() * 2 + 1; 
+            star.style.width = size + "px"; star.style.height = size + "px";
+            star.style.setProperty('--star-opacity', Math.random() * 0.5 + 0.3); 
+            const duration = Math.random() * 50 + 40; 
+            star.style.animationDuration = duration + "s";
+            star.style.animationDelay = "-" + (Math.random() * duration) + "s";
+            universe.insertBefore(star, universe.firstChild);
+        }
+    }
+
+    // --- DİĞER FONKSİYONLAR ---
+    const orbitSystem = document.getElementById('orbit-system');
+    function toggleStar(el) {
+      orbitSystem.classList.add('paused');
+      document.querySelectorAll('.feature-star').forEach(s => { if(s !== el) s.classList.remove('active'); });
+      el.classList.toggle('active');
+      if (!el.classList.contains('active')) orbitSystem.classList.remove('paused');
+    }
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.feature-star') && !e.target.closest('.wish-content') && !e.target.closest('.wish-trigger-btn')) {
+            document.querySelectorAll('.feature-star').forEach(el => el.classList.remove('active'));
+            orbitSystem.classList.remove('paused');
+        }
+    });
+
+    // --- KALBE TIKLANINCA ÇALIŞACAK FONKSİYON ---
+    function revealMainMessage() { 
+        universeAudio.pause();
+        tensionAudio.pause();
+        mainSong.play().catch(e => console.log("Şarkı çalma hatası:", e));
+        document.getElementById('final-msg-overlay').classList.add('show'); 
+    }
+
+    function closeMainMessage() { 
+        document.getElementById('final-msg-overlay').classList.remove('show'); 
+    }
+
+    const loveMessages = [
+      "Sende var olan huzur, uzayın bile bilmediği türden.", "Sen benim kayan yıldızımsın, dileğim gerçek oldu.", "Gülüşün, boşlukta yakalanmış sıcak bir yıldız gibi.", "Seninle aynı dünyada yaşamak bile şans.", "Yüzündeki minik ifadeler var ya... onlar beni bitiriyor.", "Bu sonsuz evrende en güzel tesadüfüm sensin.", "Gözlerin, benim en sevdiğim galaksi.", "Seni sevmek, yerçekimine meydan okumak gibi.", "Kalbimdeki pusulanın ibresi hep seni gösteriyor.", "Sen varsan, bu karanlık evren bile pespembe.", "Milyarlarca yıldız var ama benim güneşim sensin.","Sana bakınca tüm dertlerim atmosferde yanıp kül oluyor.", "Benim küçük dünyamın en büyük mucizesi sensin."
+    ];
+
+    let activeSpecialStar = null; 
+    function createShootingStar() {
+      const universe = document.getElementById('ultimate-universe');
+      if (!universe.classList.contains('visible')) return; 
+
+      const s2 = document.createElement('div'); s2.classList.add('shooting-star');
+      const sx = Math.random()*window.innerWidth; const sy = Math.random()*window.innerHeight;
+      s2.style.setProperty('--startX', sx+'px'); s2.style.setProperty('--startY', sy+'px');
+      s2.style.setProperty('--endX', (sx-800)+'px'); s2.style.setProperty('--endY', (sy+800)+'px'); 
+      universe.appendChild(s2); setTimeout(() => s2.remove(), 4000); 
+
+      if (activeSpecialStar) return; 
+      const isSpecial = Math.random() < 0.2; 
+      if (isSpecial) {
+        const star = document.createElement('div'); star.classList.add('special-shooting-star');
+        star.style.left = `${Math.random() * 80 + 10}%`; star.style.top = `${Math.random() * 80 + 10}%`;
+        star.onclick = (e) => { e.stopPropagation(); showLovePopup(); star.remove(); activeSpecialStar = null; };
+        setTimeout(() => { star.classList.add('stopped'); }, 100);
+        activeSpecialStar = star; universe.appendChild(star);
+      }
+    }
+    function startShootingStars() { setInterval(createShootingStar, 500); }
+    function showLovePopup() { const popup = document.getElementById('love-popup'); document.getElementById('love-message-text').innerText = loveMessages[Math.floor(Math.random() * loveMessages.length)]; popup.classList.add('show'); }
+    function closeLovePopup() { document.getElementById('love-popup').classList.remove('show'); }
+
+    // --- DİLEK FENERİ MANTIĞI ---
+    function openWishModal() {
+        document.getElementById('wish-modal-overlay').classList.add('active');
+        document.getElementById('wish-text-area').focus();
+    }
+    function closeWishModal() {
+        document.getElementById('wish-modal-overlay').classList.remove('active');
+    }
+    function sendSkyLantern() {
+        const textArea = document.getElementById('wish-text-area');
+        const text = textArea.value.trim();
+        if (text === "") { alert("Lütfen önce bir dilek yaz 💖"); return; }
+        closeWishModal();
+        textArea.value = "";
+        createLantern(text);
+    }
+    function createLantern(wishText) {
+        const universe = document.getElementById('ultimate-universe');
+        const lantern = document.createElement('div');
+        lantern.classList.add('sky-lantern');
+        const startX = Math.random() * (window.innerWidth - 100) + 50;
+        lantern.style.left = startX + 'px';
+        const duration = Math.random() * 5 + 10; 
+        lantern.style.transition = `top ${duration}s linear, opacity ${duration}s ease-in, transform ${duration}s ease-in-out`;
+        lantern.style.animation = `lanternFloat ${duration}s linear forwards`;
+        universe.appendChild(lantern);
+        setTimeout(() => { lantern.remove(); }, duration * 1000);
+    }
+  </script>
+</body>
+</html>
