@@ -22,7 +22,7 @@
             position: relative;
         }
 
-        /* --- ANİMASYONLAR --- */
+        
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             10% { transform: translate(-1px, -2px) rotate(-1deg); }
@@ -40,19 +40,19 @@
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        /* Geliştirilmiş Süzülerek Düşüş */
+        
         @keyframes fall { 
             0% { transform: translateY(-10vh) rotate(0deg); }
             100% { transform: translateY(110vh) rotate(360deg); } 
         }
 
-        /* Premium Salınım (Zikzak yerine yumuşak drift) */
+        
         @keyframes sway { 
             0%, 100% { transform: translateX(-15px) rotate(-10deg); } 
             50% { transform: translateX(15px) rotate(10deg); } 
         }
 
-        /* --- ARKA PLAN --- */
+        
         #canvas-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
         #flash-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -65,7 +65,7 @@
             z-index: 2; pointer-events: none;
         }
 
-        /* --- GİRİŞ EKRANI (ŞİFRE: selinim) --- */
+        
         #login-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px);
@@ -100,7 +100,7 @@
             transition: all 0.4s ease; text-transform: uppercase;
         }
 
-        /* --- ANA PANEL --- */
+        
         .glass-card {
             position: relative; z-index: 10; background: rgba(20, 20, 30, 0.4); 
             backdrop-filter: blur(15px); padding: 4rem 3rem; border-radius: 20px;
@@ -114,7 +114,7 @@
         .timer-wrapper { display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; flex-wrap: wrap; }
         .time-val { font-family: 'Cinzel', serif; font-size: clamp(1.8rem, 5vw, 3.2rem); text-shadow: 0 0 20px rgba(100, 150, 255, 0.6); }
 
-        /* --- PEMBE EVREN --- */
+        
         #pink-universe {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle, #ffe4e1 0%, #ffb6c1 50%, #ff69b4 100%);
@@ -129,7 +129,7 @@
         }
         .special-trigger-btn:hover { background: #fff; color: #ff69b4; transform: scale(1.05); }
 
-        /* --- PREMİNYUM AKIŞ --- */
+        
         .falling-item {
             position: fixed; top: -10vh; pointer-events: none; z-index: 30;
             animation: fall linear forwards;
@@ -144,29 +144,28 @@
             background: white; border-radius: 50%; opacity: 0.6; 
             animation: fall linear forwards;
         }
-        /* --- MOBİL VE TABLET UYUMLULUK AYARLARI --- */
+        
 @media (max-width: 768px) {
-    /* Tablet ve Telefonlar için Genel Alan */
+    
     .glass-card {
-        padding: 2.5rem 1.5rem; /* Kenar boşluklarını daralt */
+        padding: 2.5rem 1.5rem; 
         width: 92%;
         max-width: none;
     }
 
     .timer-wrapper {
-        gap: 15px; /* Geri sayım kutularını birbirine yaklaştır */
+        gap: 15px; 
         margin-bottom: 30px;
     }
 
     .time-val {
-        font-size: 2.2rem; /* Rakamları biraz küçült */
+        font-size: 2.2rem; 
     }
 
     .time-unit span[style*="font-size:0.6rem"] {
-        font-size: 0.5rem !important; /* GÜN, SAAT gibi yazıları küçült */
+        font-size: 0.5rem !important; 
     }
 
-    /* Giriş Kartı */
     .login-card {
         padding: 2rem 1.5rem;
         width: 90%;
@@ -179,14 +178,14 @@
     }
 
     .login-card button {
-        width: 100%; /* Mobilde butonu tam genişlik yap */
+        width: 100%; 
         min-width: unset;
         font-size: 0.8rem;
     }
 }
 
 @media (max-width: 480px) {
-    /* Çok Küçük Telefonlar İçin */
+    
     .timer-wrapper {
         gap: 10px;
     }
@@ -200,7 +199,7 @@
     }
 
     #pink-universe p {
-        letter-spacing: 3px !important; /* Çok uzun harf arası mobilde kelimeyi böler */
+        letter-spacing: 3px !important; 
         font-size: 0.7rem !important;
     }
 
@@ -210,14 +209,13 @@
     }
 }
 
-/* Cihaz yan çevrildiğinde (Landscape) taşmayı önlemek için */
 @media (max-height: 500px) and (orientation: landscape) {
     .glass-card {
         padding: 1rem;
         transform: scale(0.85);
     }
     .scifi-loader {
-        display: none; /* Yan ekranda yer açmak için logoyu gizle */
+        display: none; 
     }
 }
     </style>
@@ -265,6 +263,10 @@
         <button class="special-trigger-btn" onclick="window.location.href='bulut.html'">
             <span>☁️</span> GÖKYÜZÜNDE BEŞ YIL <span>⭐</span>
         </button>
+
+        <button class="special-trigger-btn" onclick="window.location.href='evren.html'">
+            <span>🪐</span> TEK MERKEZİMSİN <span>🌌</span>
+        </button>
     </div>
 </div>
 
@@ -308,7 +310,7 @@
         }
         animate();
 
-        // --- WARP SESİ ---
+        
         function playWarpSound(durationSec) {
             try {
                 const actx = new (window.AudioContext || window.webkitAudioContext)();
@@ -334,7 +336,7 @@
             } catch (e) { console.error("Ses motoru hatası:", e); }
         }
 
-        // --- GİRİŞ SİSTEMİ ---
+        
         function attemptLogin() {
             const pass = document.getElementById("passwordInput").value.toLowerCase().trim();
             if (pass === "selinim") {
@@ -356,7 +358,7 @@
             }
         }
 
-        // --- PREMİNYUM PEMBE EVREN GEÇİŞİ ---
+        
         let experienceActive = false;
         function startBizimExperience() {
             if(experienceActive) return;
@@ -387,7 +389,7 @@
             container.appendChild(inner);
             
             const size = Math.random() * 8 + 12; 
-            const duration = Math.random() * 5 + 8; // Daha yavaş süzülme
+            const duration = Math.random() * 5 + 8; 
             const leftPos = Math.random() * 100;
 
             container.style.left = leftPos + 'vw';
@@ -396,7 +398,6 @@
             container.style.filter = `blur(${Math.random() * 1}px)`;
             container.style.animationDuration = duration + 's';
             
-        
             inner.style.animationDuration = (Math.random() * 3 + 3) + 's';
             inner.style.animationDelay = (Math.random() * 2) + 's';
 
@@ -408,7 +409,7 @@
             const flake = document.createElement('div');
             flake.className = 'snow-flake';
             const size = Math.random() * 4 + 2 + 'px';
-            const duration = Math.random() * 6 + 10; // Karlar daha da yavaş
+            const duration = Math.random() * 6 + 10; 
 
             flake.style.width = size; flake.style.height = size;
             flake.style.left = Math.random() * 100 + 'vw';
@@ -435,5 +436,4 @@
     </script>
 </body>
 </html>
-
 
