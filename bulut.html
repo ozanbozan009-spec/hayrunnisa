@@ -14,8 +14,8 @@
         }
 
         body {
-            /* Daha derin ve yumuşak geçişli bir gökyüzü */
-            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+            background: linear-gradient(135deg, #050a12 0%, #102a43 50%, #050a12 100%);
+            background-size: 400% 400%;
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -24,14 +24,17 @@
             font-family: 'Segoe UI', sans-serif;
         }
 
-        /* Arka Plan Yıldızları */
-        .universe-bg { 
-            position: absolute; 
-            width: 100%; 
-            height: 100%; 
-            z-index: 0; 
+        body.music-active {
+            animation: moodShift 12s ease infinite;
         }
-        
+
+        @keyframes moodShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .universe-bg { position: absolute; width: 100%; height: 100%; z-index: 0; }
         .star { 
             position: absolute; 
             background: white; 
@@ -40,66 +43,75 @@
             animation: twinkle var(--duration) infinite ease-in-out; 
         }
 
-        /* Ana Kart Tasarımı */
         .main-card {
             position: relative;
             z-index: 10;
-            /* Mobilde ekranın %85'i, Masaüstünde max 450px */
             width: min(85vw, 450px);
             aspect-ratio: 1 / 1;
             background-image: url('OIG1.png');
             background-size: cover;
             background-position: center;
             border-radius: 40px;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(79, 172, 254, 0.2);
-            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
             display: flex;
             justify-content: center;
+            opacity: 0;
+            transform: translateY(60px) scale(0.9);
+            transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.5s ease-out;
         }
 
-        /* Alt kısımdaki kalp alanı */
+        .main-card.is-visible { opacity: 1; transform: translateY(0) scale(1); }
+
+        .main-card.music-playing {
+            animation: float 6s ease-in-out infinite, blueGlowShift 6s infinite alternate;
+        }
+
+        @keyframes blueGlowShift {
+            0% { 
+                box-shadow: 0 0 30px rgba(130, 201, 255, 0.4), 0 0 60px rgba(0, 149, 255, 0.2); 
+            }
+            50% { 
+                box-shadow: 0 0 50px rgba(255, 255, 255, 0.5), 0 0 90px rgba(79, 172, 254, 0.3); 
+            }
+            100% { 
+                box-shadow: 0 0 30px rgba(0, 191, 255, 0.4), 0 0 60px rgba(0, 120, 215, 0.2); 
+            }
+        }
+
         .heart-container {
             position: absolute;
-            bottom: -35px; /* Kartın biraz daha dışına taşırarak derinlik kattık */
+            bottom: -35px;
             cursor: pointer;
             z-index: 20;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s;
         }
+
+        .heart-container.pop-in { opacity: 1; transform: scale(1); }
 
         .heart-icon {
             color: #ffffff;
             font-size: clamp(3.5rem, 8vw, 4.5rem);
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.9));
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
             animation: pulse 1.5s infinite;
-            transition: transform 0.2s;
         }
 
-        .heart-container:active .heart-icon {
-            transform: scale(0.85);
+        .music-playing .heart-icon {
+            animation: pulse 0.8s infinite, heartBluePulse 6s infinite alternate;
         }
 
-        /* Animasyonlar */
-        @keyframes float { 
-            0%, 100% { transform: translateY(0); } 
-            50% { transform: translateY(-20px); } 
-        }
-        
-        @keyframes twinkle { 
-            0%, 100% { opacity: 0.3; transform: scale(1); } 
-            50% { opacity: 1; transform: scale(1.2); } 
+        @keyframes heartBluePulse {
+            0% { filter: drop-shadow(0 0 20px #82c9ff); }
+            50% { filter: drop-shadow(0 0 35px #ffffff); }
+            100% { filter: drop-shadow(0 0 20px #00bfff); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); filter: drop-shadow(0 0 10px #fff); }
-            50% { transform: scale(1.1); filter: drop-shadow(0 0 25px #fff); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 10px #fff); }
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-        /* Tablet/Masaüstü için ufak dokunuş */
-        @media (min-width: 1024px) {
-            .main-card {
-                width: 500px; /* Geniş ekranlarda biraz daha görkemli dursun */
-            }
-        }
+        @media (min-width: 1024px) { .main-card { width: 500px; } }
     </style>
 </head>
 <body>
@@ -110,38 +122,46 @@
 
     <div class="universe-bg" id="stars"></div>
 
-    <div class="main-card">
+    <div class="main-card" id="mainCard">
         <div class="heart-container" id="heartBtn">
             <i class="fa-solid fa-heart heart-icon"></i>
         </div>
     </div>
 
     <script>
-        // Yıldız Oluşturucu
         const starContainer = document.getElementById('stars');
-        const count = window.innerWidth < 600 ? 60 : 150;
-
-        for (let i = 0; i < count; i++) {
+        for (let i = 0; i < 100; i++) {
             const star = document.createElement('div');
             star.className = 'star';
             const size = Math.random() * 2 + 1 + 'px';
-            star.style.width = size;
-            star.style.height = size;
+            star.style.width = size; star.style.height = size;
             star.style.left = Math.random() * 100 + '%';
             star.style.top = Math.random() * 100 + '%';
             star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
             starContainer.appendChild(star);
         }
 
-        // Müzik Kontrolü
         const music = document.getElementById('selinMusic');
         const heartBtn = document.getElementById('heartBtn');
+        const mainCard = document.getElementById('mainCard');
+        const body = document.body;
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                mainCard.classList.add('is-visible');
+                heartBtn.classList.add('pop-in');
+            }, 300);
+        });
 
         heartBtn.addEventListener('click', () => {
             if (music.paused) {
-                music.play().catch(e => console.log("Başlatılamadı:", e));
+                music.play().catch(e => console.log(e));
+                mainCard.classList.add('music-playing');
+                body.classList.add('music-active');
             } else {
                 music.pause();
+                mainCard.classList.remove('music-playing');
+                body.classList.remove('music-active');
             }
         });
     </script>
