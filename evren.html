@@ -44,6 +44,14 @@
         transition: opacity 1.5s ease, transform 4s ease;
     }
 
+    /* Özür mesajı için özel stil */
+    #seq-0 {
+        font-size: 24px;
+        line-height: 1.6;
+        letter-spacing: 2px;
+        font-weight: 400;
+    }
+
     .final-sentence {
         font-family: 'Montserrat', sans-serif;
         font-size: 45px; 
@@ -110,7 +118,6 @@
     @keyframes fadeInOut { 0%, 100% { opacity: 0.4; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-3px); } }
 
     /* --- YÖRÜNGE SİSTEMİ (Wrapper ile Düzenlendi) --- */
-    /* Bu wrapper, sistemi mobilde küçültmek için kullanılır, dönmeyi etkilemez */
     #orbit-wrapper {
         position: absolute;
         top: 50%; left: 50%;
@@ -121,7 +128,6 @@
 
     .orbit-system { 
         position: absolute; width: 800px; height: 800px; 
-        /* Tam ortalamak için marginler */
         top: 50%; left: 50%; margin-top: -400px; margin-left: -400px;
         transform-style: preserve-3d; 
         animation: systemRotate 60s linear infinite; 
@@ -213,37 +219,24 @@
     .sky-lantern::after { content: ""; position: absolute; bottom: -10px; left: 50%; width: 2px; height: 10px; background: rgba(255,255,255,0.5); }
     @keyframes lanternFloat { 0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; } 10% { opacity: 1; transform: translateY(-100px) translateX(10px) scale(0.8); } 50% { transform: translateY(-50vh) translateX(-20px) scale(1); } 100% { transform: translateY(-120vh) translateX(20px) scale(0.5); opacity: 0; } }
 
-    /* --- RESPONSIVE AYARLAR (DÜZELTİLDİ) --- */
-    
+    /* --- RESPONSIVE AYARLAR --- */
     @media (max-width: 1024px) {
         #orbit-wrapper { transform: scale(0.7); }
     }
 
     @media (max-width: 768px) {
-        /* DÖNMEYİ BOZMADAN KÜÇÜLTMEK İÇİN WRAPPER KULLANIYORUZ */
-        #orbit-wrapper { 
-            transform: scale(0.42); 
-        }
-
-        /* YAZILARI KURTARMA OPERASYONU */
-        /* Sistem 0.42'ye küçüldüğü için yazıları devasa yapıyoruz ki normal görünsün */
+        #orbit-wrapper { transform: scale(0.42); }
         .star-label { 
-            font-size: 34px !important; /* Normalde 14-16px, burada büyüttük */
+            font-size: 34px !important; 
             padding: 16px 30px;
-            bottom: 60px; /* Yıldızdan biraz daha uzaklaşsın */
+            bottom: 60px; 
             border-width: 4px;
             white-space: normal;
             width: max-content;
-            max-width: 500px; /* Genişlik verelim satır atlasın */
+            max-width: 500px; 
             text-align: center;
         }
-
-        /* Aktif olunca konumu */
-        .feature-star.active .star-label {
-            bottom: 80px; 
-            transform: translateX(-50%) scale(1.1); /* Scale'i abartma */
-        }
-        
+        .feature-star.active .star-label { bottom: 80px; transform: translateX(-50%) scale(1.1); }
         .seq-text { font-size: 20px; letter-spacing: 2px; }
         .final-sentence { font-size: 32px; letter-spacing: 1px; }
         .main-title { font-size: 30px; }
@@ -259,12 +252,12 @@
         .seq-text { font-size: 18px; }
         .main-title { font-size: 26px; }
     }
-
   </style>
 </head>
 <body>
 
   <div id="text-sequence-container">
+    <div id="seq-0" class="seq-text">Hatamdan ve sinirimden dolayı<br>özür dilerim :)</div>
     <div id="seq-1" class="seq-text">Önce karanlık vardı...</div>
     <div id="seq-2" class="seq-text">Sonra bir ışık doğdu...</div>
     <div id="seq-3" class="seq-text final-sentence">Ve o ışık sendin...</div>
@@ -276,7 +269,7 @@
     
     <div class="cosmic-core" onclick="revealMainMessage()">
       <div class="premium-heart"></div>
-      <div class="click-hint">BANA DOKUN</div>
+      <div class="click-hint"></div>
     </div>
 
     <div id="orbit-wrapper">
@@ -319,26 +312,23 @@
 
   <script>
     /* --- SES DOSYALARI --- */
-    /* 1. Arka plan uzay sesi */
     const universeAudio = new Audio("sounds/sesli.mp3"); 
     universeAudio.loop = true;
     universeAudio.volume = 0.2; 
 
-    /* 2. Girişteki gerilim sesi */
     const tensionAudio = new Audio("sounds/gerilim.mp3"); 
     tensionAudio.volume = 1.0; 
 
-    /* 3. Kalbe basınca çalacak ÖZEL ŞARKI */
     const mainSong = new Audio("sounds/evren.mp3");
     mainSong.loop = true; 
 
     // --- SAYFA YÜKLENİNCE OTOMATİK BAŞLAT ---
     window.addEventListener('load', startExperience);
 
-    // --- BAŞLATMA FONKSİYONU ---
     function startExperience() {
         const textContainer = document.getElementById('text-sequence-container');
         
+        const text0 = document.getElementById('seq-0');
         const text1 = document.getElementById('seq-1');
         const text2 = document.getElementById('seq-2');
         const text3 = document.getElementById('seq-3');
@@ -346,54 +336,62 @@
         const universe = document.getElementById('ultimate-universe');
 
         // Müzikleri Başlatmayı Dene 
-        universeAudio.play().catch(e => console.log("Otomatik oynatma engellendi, etkileşim bekleniyor.", e));
-        tensionAudio.play().catch(e => console.log("Otomatik oynatma engellendi, etkileşim bekleniyor.", e));
+        universeAudio.play().catch(e => console.log("Otomatik oynatma engellendi", e));
+        tensionAudio.play().catch(e => console.log("Otomatik oynatma engellendi", e));
 
-        // --- ZAMAN ÇİZELGESİ (12 SANİYE) ---
+        // --- GÜNCELLENMİŞ ZAMAN ÇİZELGESİ (15.5 sn) ---
 
-        // T=1.0s
+        // 1. ÖZÜR MESAJI (0 - 3.5 sn)
+        setTimeout(() => {
+            text0.style.opacity = '1';
+            text0.style.transform = 'scale(1.1)';
+        }, 1000);
+
+        setTimeout(() => {
+            text0.style.opacity = '0';
+            text0.style.transform = 'scale(0.9)';
+        }, 3500);
+
+        // 2. KARANLIK (4.5 - 7.0 sn)
         setTimeout(() => {
             text1.style.opacity = '1';
             text1.style.transform = 'scale(1.1)';
-        }, 1000);
+        }, 4500);
 
-        // T=3.5s
         setTimeout(() => {
             text1.style.opacity = '0';
             text1.style.transform = 'scale(0.9)';
-        }, 3500);
+        }, 7000);
 
-        // T=4.5s
+        // 3. IŞIK (8.0 - 10.5 sn)
         setTimeout(() => {
             text2.style.opacity = '1';
             text2.style.transform = 'scale(1.1)';
-        }, 4500);
+        }, 8000);
 
-        // T=7.0s
         setTimeout(() => {
             text2.style.opacity = '0';
             text2.style.transform = 'scale(0.9)';
-        }, 7000);
+        }, 10500);
 
-        // T=8.0s
+        // 4. SEN (11.5 sn)
         setTimeout(() => {
             text3.style.opacity = '1';
             text3.style.transform = 'scale(1.0)';
-        }, 8000);
+        }, 11500);
 
-        // T=9.5s
         setTimeout(() => {
              text3.style.transition = "transform 2s ease-in"; 
              text3.style.transform = "scale(1.4)";
-        }, 9500);
+        }, 13000);
 
-        // T=11.5s
+        // PATLAMA (15.0 sn)
         setTimeout(() => {
             text3.classList.add('exploding-text'); 
             whiteFlash.style.opacity = '1'; 
-        }, 11500);
+        }, 15000);
 
-        // T=12.0s
+        // EVREN (15.5 sn)
         setTimeout(() => {
             textContainer.style.display = 'none'; 
             universe.classList.add('visible'); 
@@ -401,13 +399,12 @@
             createDeepStars(); 
             startShootingStars(); 
 
-            // Beyaz perdeyi kaldır
             whiteFlash.style.opacity = '0';
             setTimeout(() => { whiteFlash.style.display = 'none'; }, 3000);
             
             fadeInAudio();
             
-        }, 12000);
+        }, 15500);
     }
 
     // Sesi yavaşça açan fonksiyon
