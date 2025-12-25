@@ -164,15 +164,22 @@
             border-left: 175px solid transparent; border-right: 175px solid transparent;
             border-top: 140px solid rgba(255, 215, 0, 0.03); pointer-events: none;
         }
+
         .royal-seal {
             position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(2.5);
             width: 60px; height: 60px; border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b, #5e3b08);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.7), inset 0 0 15px rgba(0,0,0,0.3), 0 0 20px rgba(255, 215, 0, 0.2);
+            background: radial-gradient(circle at 30% 30%, #dc143c, #8b0000, #500000);
+            
+            box-shadow: 0 5px 15px rgba(0,0,0,0.7), inset 0 0 15px rgba(0,0,0,0.3), 0 0 20px rgba(220, 20, 60, 0.4);
+            
             z-index: 10; opacity: 0; display: flex; justify-content: center; align-items: center;
             font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.8rem; 
-            color: #3d2300; text-shadow: 1px 1px 0 rgba(255,255,255,0.2); border: 2px solid rgba(255,223,100,0.3);
+            
+            color: #ffffff; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); 
+            
+            border: 2px solid rgba(220, 20, 60, 0.5);
         }
 
         .crystal-card.shake { animation: errorShake 0.5s ease-in-out !important; }
@@ -205,6 +212,7 @@
         }
         .final-message.visible { opacity: 1; }
 
+        /* --- MOBİL VE TABLET UYUMLULUĞU --- */
         @media screen and (max-width: 768px) {
             .crystal-card { padding: 30px 20px; min-height: 50vh; }
             .title { font-size: 1.1rem; letter-spacing: 2px; }
@@ -318,7 +326,7 @@
             const templateParams = {
                 message: txt.value.trim(),
                 name: "Selin", 
-                email: "iletisim@fatmakity.baby",
+                email: "iletisim@fatmakity.baby", 
                 title: "Kalpten Gelen Bir Mektup"
             };
             emailjs.send('service_ywdmz4m', 'template_rhpis0n', templateParams)
@@ -353,7 +361,7 @@
             card.style.opacity = '0';
             card.style.transform = 'translateY(50px)';
             txt.value = "";
-            txt.placeholder = "İçinden ne geliyorsa güzelim, O gün yan yana okumak için...";
+            txt.placeholder = "Sesimden önce, ruhuma dokun...";
 
             setTimeout(() => {
                 card.style.opacity = '1';
