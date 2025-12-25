@@ -57,8 +57,8 @@
         @keyframes fallParticle { to { transform: translateY(105vh) rotate(360deg); } }
 
         .login-card { 
-            position: relative; z-index: 10; text-align: center; width: 100%; max-width: 340px; 
-            padding: 2.5rem 1.5rem; background: rgba(255, 255, 255, 0.05);
+            position: relative; z-index: 10; text-align: center; width: 100%; max-width: 320px; 
+            padding: 2rem 1.2rem; background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border-radius: 25px; border: 1px solid rgba(255, 215, 0, 0.15);
             animation: floatCard 6s ease-in-out infinite, breatheGlow 4s ease-in-out infinite;
@@ -82,14 +82,15 @@
         }
         #white-flash-overlay.flash-instant { transition: none !important; opacity: 1 !important; }
 
+        
         .glass-card {
             position: relative; 
             z-index: 10; 
-            background: rgba(20, 20, 30, 0.6); 
+            background: rgba(20, 20, 30, 0.65); 
             backdrop-filter: blur(15px); 
             width: 90%;
-            max-width: 450px; 
-            padding: 1.8rem; 
+            max-width: 360px; 
+            padding: 1.5rem 1.2rem;
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.08); 
             text-align: center; 
@@ -98,27 +99,29 @@
             display: none; 
             box-shadow: 0 0 30px rgba(0,0,0,0.5); 
             overflow: hidden;
-            display: flex; flex-direction: column; align-items: center; /* İçeriği ortala */
+            display: flex; flex-direction: column; align-items: center; 
         }
         .glass-card.active { animation: float 10s ease-in-out infinite; opacity: 1; transform: scale(1); }
         @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
 
         .glass-card h1 { 
-            font-size: clamp(1.8rem, 4vw, 2.5rem); 
-            margin-bottom: 5px; 
+            font-size: clamp(1.6rem, 3.5vw, 2rem); 
+            margin-bottom: 2px; 
             text-shadow:0 0 10px rgba(255,255,255,0.3); 
         }
         .glass-card p { 
-            font-size: clamp(0.65rem, 2vw, 0.8rem); 
-            margin-bottom: 20px; 
+            font-size: 0.7rem; 
+            margin-bottom: 15px; 
             color:rgba(200, 220, 255, 0.6); 
+            max-width: 90%;
+            line-height: 1.3;
         }
 
-        .timer-wrapper { display: flex; justify-content: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
-        .time-unit { display: flex; flex-direction: column; align-items: center; min-width: 50px; }
+        .timer-wrapper { display: flex; justify-content: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+        .time-unit { display: flex; flex-direction: column; align-items: center; min-width: 45px; }
         .holo-number {
             font-family: 'Cinzel', serif; 
-            font-size: clamp(1.5rem, 5vw, 2.2rem); 
+            font-size: clamp(1.3rem, 4vw, 1.6rem);
             font-weight: 700;
             background: linear-gradient(to bottom, #ffffff 0%, #b8e2ff 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -126,12 +129,12 @@
             animation: holoFloat 3s ease-in-out infinite;
         }
         @keyframes holoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
-        .time-label { font-size: 0.5rem; letter-spacing: 1.5px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+        .time-label { font-size: 0.45rem; letter-spacing: 1.5px; color: rgba(255,255,255,0.5); margin-top: 2px; }
 
         .heartbeat-wrapper {
-            width: 100%; height: 40px; 
+            width: 100%; height: 30px;
             position: relative; display: flex; align-items: center; justify-content: center;
-            margin: 5px 0 15px 0; overflow: hidden;
+            margin: 5px 0 12px 0; overflow: hidden;
         }
         .heartbeat-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 3px rgba(255, 105, 180, 0.4)); }
         .heartbeat-path-bg { fill: none; stroke: rgba(255, 255, 255, 0.05); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
@@ -144,35 +147,39 @@
 
         .mysterious-lock-wrapper {
             background: rgba(0,0,0,0.15); 
-            padding: 12px; 
+            padding: 10px; 
             border-radius: 12px; 
             border: 1px solid rgba(255,255,255,0.04); 
             display: flex; flex-direction: column; align-items: center;
             width: 100%; 
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .lock-container {
-            width: 40px; height: 40px; 
+            width: 32px; height: 32px;
             border-radius: 50%;
             border: 1px solid rgba(255, 215, 0, 0.2);
             display: flex; justify-content: center; align-items: center;
-            font-size: 1.2rem; color: rgba(255, 215, 0, 0.6);
-            cursor: pointer; transition: all 0.4s; margin-bottom: 5px;
+            font-size: 1rem; color: rgba(255, 215, 0, 0.6);
+            cursor: pointer; transition: all 0.4s; margin-bottom: 4px;
             box-shadow: 0 0 10px rgba(0,0,0,0.3);
         }
-        .lock-message { font-family: 'Cinzel', serif; font-size: 0.6rem; color: rgba(255,255,255,0.3); letter-spacing: 1.5px; min-height: 12px; margin-bottom: 10px; }
+        .lock-message { font-family: 'Cinzel', serif; font-size: 0.55rem; color: rgba(255,255,255,0.3); letter-spacing: 1.5px; min-height: 10px; margin-bottom: 8px; }
         .lock-container:hover {
             border-color: #ff4d4d; color: #ff4d4d;
             box-shadow: 0 0 15px rgba(255, 77, 77, 0.2); animation: shakeLock 0.4s ease-in-out;
         }
         @keyframes shakeLock { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-10deg); } 75% { transform: rotate(10deg); } }
 
-        .button-group { display: flex; flex-direction: column; gap: 10px; width: 100%; align-items: center; }
+        .button-group { display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: center; } /* Gap azaldı */
+        
         .special-trigger-btn { 
-            position: relative; width: 100%; max-width: 100%; padding: 12px 15px; 
+            position: relative; width: 100%; 
+            padding: 10px 14px; 
             background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px;
-            font-family: 'Cinzel', serif; font-size: 0.75rem; font-weight: 700;
+            font-family: 'Cinzel', serif; 
+            font-size: 0.7rem; /* Buton yazı boyutu küçüldü */
+            font-weight: 700;
             color: rgba(255, 255, 255, 0.6); cursor: pointer; 
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             display: flex; align-items: center; justify-content: space-between;
@@ -194,12 +201,15 @@
         .btn-universe { box-shadow: 0 0 5px rgba(255, 215, 0, 0.05); }
         .btn-universe:hover { background: rgba(255, 215, 0, 0.1); box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); border-color: #ffd700; }
         
-        .btn-icon { font-size: 1rem; filter: drop-shadow(0 0 5px rgba(255,255,255,0.4)); }
-        .btn-arrow { font-size: 0.7rem; opacity: 0; transform: translateX(-5px); transition: all 0.4s; }
+        .btn-distance { box-shadow: 0 0 5px rgba(147, 112, 219, 0.05); }
+        .btn-distance:hover { background: rgba(147, 112, 219, 0.1); box-shadow: 0 0 15px rgba(147, 112, 219, 0.4); border-color: #9370db; }
+
+        .btn-icon { font-size: 0.9rem; filter: drop-shadow(0 0 5px rgba(255,255,255,0.4)); }
+        .btn-arrow { font-size: 0.65rem; opacity: 0; transform: translateX(-5px); transition: all 0.4s; }
         .special-trigger-btn:hover .btn-arrow { opacity: 1; transform: translateX(0); }
 
         .compliment-container {
-            margin-top: 10px;
+            margin-top: 5px;
             position: relative;
             width: 100%;
             display: flex;
@@ -213,17 +223,17 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             color: #e0e0e0; 
-            padding: 10px 20px;
+            padding: 8px 16px; 
             border-radius: 50px;
             font-family: 'Cinzel', serif;
-            font-size: 0.7rem;
+            font-size: 0.65rem; 
             font-weight: 600;
             cursor: pointer;
             transition: all 0.5s ease;
             letter-spacing: 2px;
             overflow: hidden;
             width: 100%;
-            max-width: 300px;
+            max-width: 250px;
         }
 
         .magic-btn span { filter: drop-shadow(0 0 5px #fff); }
@@ -237,10 +247,10 @@
         }
 
         #compliment-text {
-            min-height: 35px; 
-            margin-bottom: 10px;
+            min-height: 30px; 
+            margin-bottom: 5px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.75rem; /* Küçültüldü */
             font-weight: 400;
             color: #fff;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
@@ -418,7 +428,7 @@
             .glass-card { padding: 1.2rem; width: 90%; max-width: none; }
             .login-card { width: 85%; padding: 2rem 1.2rem; }
             .special-trigger-btn { font-size: 0.7rem; padding: 10px 12px; }
-            .holo-number { font-size: 1.8rem; }
+            .holo-number { font-size: 1.3rem; }
             .crystal-frame { width: 90%; }
         }
     </style>
@@ -496,6 +506,12 @@
                     TEK MERKEZİMSİN 
                     <span class="btn-arrow">➔</span>
                 </button>
+
+                <button class="special-trigger-btn btn-distance" onclick="window.location.href='mektup.html'">
+                    <span class="btn-icon">💌</span> 
+                    MESAFELERİN ÖTESİ 
+                    <span class="btn-arrow">➔</span>
+                </button>
             </div>
         </div>
 
@@ -566,7 +582,7 @@
         function attemptLogin() {
             const pass = document.getElementById("passwordInput").value.toLowerCase().trim();
             const err = document.getElementById("login-error");
-            if (pass === "selinim") {
+            if (btoa(pass) === "c2VsaW5pbQ==") {
                 stopLoginEffects();
                 document.getElementById("login-screen").style.opacity = '0';
                 setTimeout(() => { document.getElementById("login-screen").style.display = 'none'; }, 500);
@@ -595,7 +611,7 @@
         function lockHover(isHover) {
             const msg = document.getElementById("lockMsg");
             if(isHover) { msg.innerText = "HENÜZ VAKTİ GELMEDİ..."; msg.style.color = "#ff6b6b"; } 
-            else { msg.innerText = "ACCESS DENIED"; msg.style.color = "rgba(255,255,255,0.4)"; }
+            else { msg.innerText = "KAPSÜL KİLİTLİ"; msg.style.color = "rgba(255,255,255,0.4)"; }
         }
 
         function createShootingStar() {
@@ -744,4 +760,3 @@
     </script>
 </body>
 </html>
-
