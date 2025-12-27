@@ -2,7 +2,13 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#1a0508">
+
     <title>SELİN</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -94,7 +100,7 @@
         }
 
         @media screen and (orientation: portrait) {
-            #turn-device-warning { display: flex; } 
+            #turn-device-warning { display: flex; }
             #rotateWrapper { display: none !important; }
         }
 
@@ -169,6 +175,7 @@
             transition: opacity 0.5s;
         }
 
+        /* --- PROFİL BÖLÜMÜ --- */
         .profile-overlay {
             display: none;
             position: fixed;
@@ -256,7 +263,9 @@
         window.addEventListener('load', function() {
             var audio = document.getElementById("bgMusic");
             audio.volume = 0.5; 
+
             var playPromise = audio.play();
+
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
                     function forcePlay() {
@@ -266,7 +275,15 @@
                             document.removeEventListener('scroll', forcePlay);
                             document.removeEventListener('keydown', forcePlay);
                         }).catch(e => {});
+
+                        var elem = document.documentElement;
+                        if (elem.requestFullscreen) {
+                            elem.requestFullscreen().catch(err => console.log(err));
+                        } else if (elem.webkitRequestFullscreen) { /* Safari */
+                            elem.webkitRequestFullscreen().catch(err => console.log(err));
+                        }
                     }
+
                     document.addEventListener('click', forcePlay);
                     document.addEventListener('touchstart', forcePlay); 
                     document.addEventListener('scroll', forcePlay);     
@@ -484,7 +501,6 @@
         function closeProfile() {
             profileOverlay.classList.remove('active'); 
             
-            // Profile kapanınca class'ı siliyoruz, uyarı tekrar aktif oluyor
             document.body.classList.remove('profile-active');
 
             setTimeout(() => {
