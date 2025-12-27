@@ -46,7 +46,6 @@
             pointer-events: none; z-index: 1;
         }
 
-        /* --- GİRİŞ EKRANI (Yeni Eklenen Kısım) --- */
         #entry-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -93,11 +92,10 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 20px;
             transition: opacity 1s ease;
-            opacity: 0;
+            opacity: 0; 
         }
         
         #rotateWrapper.visible { opacity: 1; }
-
         .wrapper-hidden { opacity: 0 !important; pointer-events: none; }
 
         .quote-wrapper {
@@ -145,6 +143,7 @@
         .quote-text.active { animation: textReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         @keyframes textReveal { to { opacity: 1; transform: translateY(0); filter: blur(0); } }
 
+        /* --- KONTROLLER --- */
         .controls {
             position: relative; margin-top: 40px;
             display: flex; gap: 20px; z-index: 20; align-items: center;
@@ -152,8 +151,9 @@
             background: rgba(0,0,0,0.2);
             border-radius: 50px;
             backdrop-filter: blur(5px);
+            transition: opacity 0.5s ease;
         }
-        .controls.hidden { opacity: 0; pointer-events: none; display: none; }
+        .controls.hidden { opacity: 0 !important; pointer-events: none; display: none !important; }
 
         .btn-control {
             background: none; border: none; color: rgba(255,255,255,0.6);
@@ -172,6 +172,7 @@
             transition: opacity 0.5s;
         }
 
+        /* --- PROFİL BÖLÜMÜ --- */
         .profile-overlay {
             display: none;
             position: fixed;
@@ -417,38 +418,45 @@
         function startExperience() {
             const entryScreen = document.getElementById('entry-screen');
             entryScreen.classList.add('fade-out');
-
             bgMusic.volume = 0.5;
-            bgMusic.play().then(() => {
-            }).catch(error => {
-                console.log("Otomatik oynatma engellendi, kullanıcı etkileşimi bekleniyor.");
-            });
-
+            bgMusic.play().catch(error => { console.log("Oynatma hatası", error); });
             setTimeout(() => {
                 rotateWrapper.classList.add('visible');
                 showSlide(0);
                 startAutoPlay();
-            }, 500); 
+            }, 500);
         }
 
         function showSlide(index) {
-            if (index >= quotes.length) currentIndex = 0;
-            else if (index < 0) currentIndex = quotes.length - 1;
-            else currentIndex = index;
+            if (index >= quotes.length) {
+                return;
+            }
+
+            if (index < 0) {
+                currentIndex = 0;
+            } else {
+                currentIndex = index;
+            }
 
             textElement.classList.remove('active');
             
-            if (currentIndex === quotes.length - 1) {
+            const isLastSlide = (currentIndex === quotes.length - 1);
+
+            if (isLastSlide) {
                 revealBtn.style.display = "block"; 
+                controls.classList.add('hidden'); 
+                progressBar.style.opacity = '0'; 
+                stopAutoPlay(); 
+                isPlaying = false; 
             } else {
                 revealBtn.style.display = "none";
+                controls.classList.remove('hidden'); 
+                progressBar.style.opacity = '1';
             }
 
             setTimeout(() => {
                 if(quotes[currentIndex]) {
                     textElement.innerText = quotes[currentIndex];
-                } else {
-                    textElement.innerText = "...";
                 }
                 textElement.classList.add('active');
             }, 300);
@@ -472,10 +480,14 @@
             profileOverlay.classList.remove('active'); 
             
             setTimeout(() => {
-                rotateWrapper.classList.add('visible'); // Görünürlüğü aç
-                controls.classList.remove('hidden');
-                progressBar.style.opacity = '1';
-                startAutoPlay(); 
+                rotateWrapper.classList.add('visible');
+                if (currentIndex !== quotes.length - 1) {
+                    controls.classList.remove('hidden');
+                    progressBar.style.opacity = '1';
+                    startAutoPlay(); 
+                } else {
+                    revealBtn.style.display = 'block';
+                }
             }, 500);
         }
 
@@ -494,6 +506,7 @@
         }
 
         function nextSlide() {
+            if (currentIndex >= quotes.length - 1) return;
             showSlide(currentIndex + 1);
             if(isPlaying) startAutoPlay(); 
         }
@@ -534,6 +547,8 @@
         }
         
         document.addEventListener('keydown', (e) => {
+            if (currentIndex === quotes.length - 1) return;
+
             if (e.key === "ArrowRight") nextSlide();
             if (e.key === "ArrowLeft") prevSlide();
             if (e.key === " ") togglePlay();
