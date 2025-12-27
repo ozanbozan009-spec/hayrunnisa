@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SÖZLERİMİZ</title>
+    <title>SELİN</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -42,20 +42,16 @@
             pointer-events: none; z-index: 1;
         }
 
-        /* --- NEFES ALMA ANİMASYONLARI --- */
-        /* Normal kutular için */
         @keyframes floatBreath {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
         }
         
-        /* Fixed (Sabitlenmiş) kutular için - Merkezlemeyi bozmadan süzülme */
         @keyframes floatBreathFixed {
             0%, 100% { transform: translate(-50%, -50%) translateY(0); }
             50% { transform: translate(-50%, -50%) translateY(-15px); }
         }
 
-        /* --- DÖNDÜRME SARMALAYICISI --- */
         #rotateWrapper {
             width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -82,7 +78,6 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
             transition: opacity 0.8s ease, transform 0.8s ease; /* Transform transition'ı animasyonla çakışmasın diye dikkatli */
             
-            /* Süzülme Efekti Eklendi */
             animation: floatBreath 6s ease-in-out infinite; 
         }
 
@@ -115,7 +110,6 @@
         .quote-text.active { animation: textReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         @keyframes textReveal { to { opacity: 1; transform: translateY(0); filter: blur(0); } }
 
-        /* --- KONTROLLER --- */
         .controls {
             position: relative; margin-top: 40px;
             display: flex; gap: 30px; z-index: 20; align-items: center;
@@ -139,7 +133,6 @@
             transition: opacity 0.5s;
         }
 
-        /* --- PROFİL BÖLÜMÜ --- */
         .profile-container {
             display: none; 
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95);
@@ -153,10 +146,8 @@
             opacity: 0; transition: all 0.8s ease; text-align: left;
         }
 
-        /* Süzülme Efekti (Fixed pozisyonu koruyarak) */
         .profile-container.active { 
             display: block; opacity: 1; 
-            /* Animasyon burada devreye giriyor */
             animation: floatBreathFixed 6s ease-in-out infinite; 
         }
         
@@ -210,14 +201,12 @@
     <script>
         window.addEventListener('load', function() {
             var audio = document.getElementById("bgMusic");
-            audio.volume = 0.5; // Ses seviyesi %50
+            audio.volume = 0.5; 
             
-            // Otomatik oynatmaya çalış
             var promise = audio.play();
             
             if (promise !== undefined) {
                 promise.catch(error => {
-                    // Tarayıcı otomatik izni vermezse, ilk tıklamada çal
                     console.log("Otomatik oynatma engellendi, tıklama bekleniyor.");
                     document.addEventListener('click', function() {
                         audio.play();
@@ -335,10 +324,10 @@
             "senin gülüşünü yerimm",
             "eriyorumm susss",
             "ileride çocuklarıma, yani kızıma göstermek istiyorum bu siteyi",
-            "bebek istiyorum",
+            "ekrandan atlayıp geleceğim yanına",
             "YERİM BEN BU ÇOCUĞU",
             "sadece beni ye",
-            "ben de asla unutmazdım",
+            "seni dusunmekten zaman bulamiyorum ki",
             "cok utanirim ya yanaklarim kizarir",
             "kadin da adami çok seviyormus",
             "hayır olme lazimsin bana",
@@ -358,7 +347,6 @@
             "SALAKSIN",
             "nasibin olmam icin dua edebilirdin ama",
             "ruyamda bi kizim olmustu",
-            "cok tatliydi pembis pembis giydirmistim"
             "sus cocuk",
             "oglumuz olursa adini karan koyariz",
             "sen uyursan uyurum ben de",
@@ -366,7 +354,8 @@
             "sadece sana guzel konusuyorum",
             "ben uslu bi kizim tamam mi",
             "oyyss yerim senii",
-            "ekrandan atlayıp geleceğim yanına",
+            "bebek istiyorum",
+            "cok tatliydi pembis pembis giydirmistim"
         ];
 
         const slideDuration = 4500; 
