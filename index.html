@@ -206,6 +206,8 @@
 
         .btn-icon { font-size: 0.9rem; filter: drop-shadow(0 0 5px rgba(255,255,255,0.4)); }
         .btn-arrow { font-size: 0.65rem; opacity: 0; transform: translateX(-5px); transition: all 0.4s; }
+        .btn-archive { box-shadow: 0 0 5px rgba(220, 20, 60, 0.05); }
+        .btn-archive:hover { background: rgba(220, 20, 60, 0.1); box-shadow: 0 0 15px rgba(220, 20, 60, 0.4); border-color: #dc143c; }
         .special-trigger-btn:hover .btn-arrow { opacity: 1; transform: translateX(0); }
 
         .compliment-container {
@@ -512,6 +514,12 @@
                     MESAFELERİN ÖTESİ 
                     <span class="btn-arrow">➔</span>
                 </button>
+
+                <button class="special-trigger-btn btn-archive" onclick="window.location.href='kalp.html'">
+                    <span class="btn-icon">🗂️</span> 
+                    KALBİMİN ARŞİVİ 
+                    <span class="btn-arrow">➔</span>
+                </button>
             </div>
         </div>
 
@@ -760,5 +768,3 @@
     </script>
 </body>
 </html>
-
-
