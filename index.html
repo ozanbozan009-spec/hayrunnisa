@@ -11,7 +11,7 @@
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SELİN</title>
+    <title></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
@@ -456,12 +456,12 @@
     <div id="login-screen">
         <div id="login-particles-container"></div>
         <div class="login-card" id="loginCardElement">
-            <div class="festive-icon">🎀</div> 
+            <div class="festive-icon"></div> 
             <h2 style="font-family:'Cinzel'; letter-spacing:2px; color: #ffdfba; text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); font-size: 1.5rem;">ÇOK YAKINDAAAA</h2>
             <p style="font-size:0.70rem; color:rgba(255,255,255,0.7); margin-bottom:25px; margin-top:8px; font-weight:300; max-width: 260px; line-height: 1.4;"></p>
             <input type="password" id="passwordInput" placeholder="Şifre..." autocomplete="off">
             <button onclick="attemptLogin()">HAHAHAHAHA</button>
-            <p id="login-error">❌ APTAL TEKRAR DENE</p>
+            <p id="login-error">❌ HAHAHHAHAHAHA</p>
         </div>
     </div>
 
@@ -475,7 +475,7 @@
     </div>
 
     <div class="glass-card">
-        <h1 style="font-family:'Cinzel';">SELİN</h1>
+        <h1 style="font-family:'Cinzel';"></h1>
         <p>Bu bir geri sayım değil… İhtimallerin sessiz bekleyişi.</p>
 
         <div class="timer-wrapper">
@@ -580,7 +580,7 @@
             if (!container) return;
             const particle = document.createElement('div');
             particle.className = 'login-particle';
-            const types = ['❤️','❤️', '🤍','🤍','❆','❆','❆','❆'];
+            
             particle.innerText = types[Math.floor(Math.random() * types.length)];
             const size = Math.random() * 10 + 8; 
             particle.style.fontSize = `${size}px`;
@@ -598,7 +598,7 @@
         function attemptLogin() {
             const pass = document.getElementById("passwordInput").value.toLowerCase().trim();
             const err = document.getElementById("login-error");
-            if (btoa(pass) === "c2VsaW5pbQ==") {
+            if (btoa(pass) === "Y29tcHV0ZXIxMjM=") {
                 stopLoginEffects();
                 document.getElementById("login-screen").style.opacity = '0';
                 setTimeout(() => { document.getElementById("login-screen").style.display = 'none'; }, 500);
@@ -776,6 +776,3 @@
     </script>
 </body>
 </html>
-
-
-
