@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a0508">
+
+    <title>ELGÜN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rose-gold: #b76e79; 
+            --deep-bg: #1a0508; 
+            --cream-text: #fdfbf7; 
+            --glass-border: rgba(183, 110, 121, 0.3);
+            --premium-gold: #d4af37;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, var(--deep-bg), #3d0c14, #5e2129, #2c0e15);
+            background-size: 400% 400%;
+            animation: luxuryFlow 20s ease infinite;
+            color: var(--cream-text);
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        @keyframes luxuryFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body::after {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 1;
+        }
+
+        #entry-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--deep-bg);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        #entry-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .start-btn {
+            background: transparent;
+            border: 2px solid var(--rose-gold);
+            color: var(--rose-gold);
+            padding: 15px 50px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.5s ease;
+            box-shadow: 0 0 20px rgba(183, 110, 121, 0.2);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .start-btn:hover {
+            background: var(--rose-gold);
+            color: #fff;
+            box-shadow: 0 0 40px rgba(183, 110, 121, 0.6);
+            transform: scale(1.05);
+        }
+
+        #rotateWrapper {
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 20px;
+            transition: opacity 1s ease;
+            opacity: 0; 
+        }
+        
+        #rotateWrapper.visible { opacity: 1; }
+        .wrapper-hidden { opacity: 0 !important; pointer-events: none; }
+
+        .quote-wrapper {
+            position: relative; z-index: 10;
+            width: 90%; max-width: 450px; 
+            min-height: 50vh; max-height: 70vh;
+            padding: 40px 25px;
+            background: rgba(40, 10, 15, 0.65);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border-radius: 20px; border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            transition: opacity 0.8s ease;
+            animation: floatBreath 6s ease-in-out infinite;
+        }
+
+        @keyframes floatBreath {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .corner-heart {
+            position: absolute; width: 25px; height: 25px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b76e79' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: contain; background-repeat: no-repeat; opacity: 0.8;
+        }
+        .tl { top: 15px; left: 15px; transform: rotate(-45deg); }
+        .tr { top: 15px; right: 15px; transform: rotate(45deg); }
+        .bl { bottom: 15px; left: 15px; transform: rotate(-135deg); }
+        .br { bottom: 15px; right: 15px; transform: rotate(135deg); }
+
+        .quote-icon {
+            font-family: 'Cormorant Garamond', serif; font-size: 3rem;
+            color: var(--rose-gold); opacity: 0.4; line-height: 0.5; margin-bottom: 20px;
+        }
+
+        .quote-text {
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: clamp(1.4rem, 5vw, 2rem);
+            font-weight: 600; line-height: 1.4; color: var(--cream-text);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5); opacity: 0; 
+            transform: translateY(15px); filter: blur(5px); letter-spacing: 0.5px;
+            padding: 0 10px;
+        }
+        .quote-text.active { animation: textReveal 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @keyframes textReveal { to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+
+        /* --- KONTROLLER --- */
+        .controls {
+            position: relative; margin-top: 40px;
+            display: flex; gap: 20px; z-index: 20; align-items: center;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.5s ease;
+        }
+        .controls.hidden { opacity: 0 !important; pointer-events: none; display: none !important; }
+
+        .btn-control {
+            background: none; border: none; color: rgba(255,255,255,0.6);
+            font-size: 1.8rem; cursor: pointer; transition: all 0.4s ease;
+            display: flex; justify-content: center; align-items: center;
+            width: 40px; height: 40px;
+        }
+        .btn-control:hover, .btn-control:active { color: var(--rose-gold); transform: scale(1.1); text-shadow: 0 0 15px var(--rose-gold); }
+        
+        .counter { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 0.9rem; color: rgba(255,255,255,0.8); letter-spacing: 2px; }
+        
+        .progress-line { 
+            position: fixed; bottom: 0; left: 0; height: 4px; width: 0%; 
+            background: linear-gradient(90deg, transparent, var(--rose-gold), transparent); 
+            box-shadow: 0 0 15px var(--rose-gold); z-index: 999; 
+            transition: opacity 0.5s;
+        }
+
+        /* --- PREMIUM BÖLÜMÜ (NEBULA VE ULTRA ELİT TEMA) --- */
+        .profile-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; 
+            width: 100%; height: 100%;
+            background: rgba(10, 3, 5, 0.92);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            padding: 20px;
+        }
+
+        .profile-overlay.active { display: flex; opacity: 1; }
+
+        .profile-card {
+            width: 100%; max-width: 460px;
+            height: auto;
+            max-height: 80vh;
+            background: linear-gradient(135deg, rgba(26, 5, 8, 0.95), rgba(44, 10, 18, 0.9), rgba(15, 3, 5, 0.98));
+            background-size: 200% 200%;
+            animation: nebulaGlow 12s ease infinite, floatBreath 6s ease-in-out infinite;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.15), inset 0 0 25px rgba(183, 110, 121, 0.2);
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes nebulaGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .profile-scroll-area { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+
+        .profile-header {
+            text-align: center; margin-bottom: 25px;
+        }
+        .profile-title {
+            font-family: 'Cormorant Garamond', serif; 
+            font-size: 2.8rem; 
+            color: var(--premium-gold); 
+            letter-spacing: 6px; 
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .premium-sparkle {
+            color: var(--premium-gold);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            animation: pulseSparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseSparkle {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; text-shadow: 0 0 10px var(--premium-gold); }
+        }
+
+        .book-quote-container {
+            padding: 10px 15px;
+            position: relative;
+        }
+
+        .book-quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.4rem, 5vw, 1.8rem);
+            font-style: italic;
+            line-height: 1.6;
+            color: var(--cream-text);
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .book-author {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            color: var(--premium-gold);
+            letter-spacing: 4px;
+            margin-top: 30px;
+            text-transform: uppercase;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        .reveal-btn {
+            display: none; 
+            position: absolute; bottom: -70px; left: 50%; transform: translateX(-50%);
+            padding: 12px 30px; width: max-content;
+            background: var(--rose-gold); color: #fff; border: none; border-radius: 50px;
+            font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px;
+            cursor: pointer; box-shadow: 0 0 20px rgba(183, 110, 121, 0.5);
+            animation: bounceBtn 2s infinite; z-index: 100;
+        }
+        @keyframes bounceBtn { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-5px); } }
+
+        .close-btn-container { text-align: center; margin-top: 35px; width: 100%; }
+        .close-btn {
+            background: none; 
+            border: 1px solid rgba(212, 175, 55, 0.4); 
+            color: rgba(255, 255, 255, 0.8); 
+            padding: 12px 40px; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-size: 0.9rem; 
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+        }
+        .close-btn:hover { 
+            border-color: var(--premium-gold); 
+            color: #1a0508; 
+            background: var(--premium-gold);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+            font-weight: 500;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="entry-screen">
+        <button class="start-btn" onclick="startExperience()">DOKUN</button>
+    </div>
+
+    <!-- Sesi garantiye almak için audio elementini temizledik -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="biz.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="rotateWrapper">
+        
+        <div class="quote-wrapper" id="cardWrapper">
+            <div class="corner-heart tl"></div>
+            <div class="corner-heart tr"></div>
+            <div class="corner-heart bl"></div>
+            <div class="corner-heart br"></div>
+
+            <div class="quote-icon">“</div>
+            <div class="quote-text" id="quoteText"></div>
+            
+            <button class="reveal-btn" id="revealBtn" onclick="openProfile()">HİKAYENİN BAŞROLÜ ✨</button>
+        </div>
+
+        <div class="controls" id="controls">
+            <button class="btn-control" onclick="prevSlide()">⟵</button>
+            <span class="counter" id="counter">1 / 35</span>
+            <button class="btn-control" id="playBtn" onclick="togglePlay()">॥</button>
+            <button class="btn-control" onclick="nextSlide()">⟶</button>
+        </div>
+
+    </div>
+
+    <div class="progress-line" id="progressBar"></div>
+
+    <div class="profile-overlay" id="profileOverlay">
+        <div class="profile-card">
+            <div class="profile-scroll-area">
+                <div class="premium-sparkle">✦</div>
+                <div class="profile-header">
+                    <div class="profile-title">ELGÜN</div>
+                </div>
+
+                <div class="book-quote-container">
+                    <div class="book-quote">
+                        "Daha uçsuz bucaksız, daha derin bir gökyüzü olamazdı seni sevmekten başka. Bir insanı sevmekle başlayacaktı her şey, ve ben seni tam kalbinden seviyorum."
+                    </div>
+                    <div class="book-author">— Cemal Süreya</div>
+                </div>
+
+                <div class="close-btn-container">
+                    <button class="close-btn" onclick="closeProfile()">Sözlere Dön</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quotes = [
+            "seniii çokkk seviyorummm",
+            "defffolll",
+            "itsin itt",
+            "yemek yedinmi",
+            "dikkat et kendineee",
+            "günaydınn ömrümmm",
+            "tamam kocammm",
+            "sanaa aşığımmm",
+            "nefesinden öpeyimmm",
+            "kafanı dağıtırım atarsan",
+            "kocaman öpüyorum",
+            "seni çok özledim",
+            "ölürümmm sanaaa",
+            "kurban olurummmm",
+            "napıyorsun,nerdesin",
+            "seni düşünmekten zaman bulamıyorum ki",
+            "hayır seninle hep mutluyum ben",
+            "köpeksin köpek",
+            "seni düşünerek uyudum",
+            "bu hayalleri başkasıyla yaşarsan, yazıklar olsun sana da bana da",
+            "bebeeemmmm",
+            "öptüm kocamaann",
+            "iyi uykular ömrümmm",
+            "gözüm senden başkasını görmüyor",
+            "avucumaa geeell",
+            "ısırırım seniii",
+            "kucağında uyumak istiyorumm",
+            "kokunu içime çeke çeke",
+            "o ağzını yiyimmm",
+            "HEMEN ŞİMDİ İSTİYORUM",
+            "amiiinnnnnn Allahımmmmm lütfeeennnn",
+            "Allaha emanet ol",
+            "ellerimle yedirirdim sana",
+            "ikiii gözümmm",
+            "seni istiyorum"
+        ];
+
+        const slideDuration = 4500; 
+        
+        let currentIndex = 0;
+        let isPlaying = true;
+        let slideInterval;
+        let progressInterval;
+
+        const textElement = document.getElementById('quoteText');
+        const revealBtn = document.getElementById('revealBtn');
+        const rotateWrapper = document.getElementById('rotateWrapper');
+        const profileOverlay = document.getElementById('profileOverlay');
+        const controls = document.getElementById('controls');
+        const progressBar = document.getElementById('progressBar');
+        const counter = document.getElementById('counter');
+        const playBtn = document.getElementById('playBtn');
+        const bgMusic = document.getElementById("bgMusic");
+
+        // Müziğin çalmasını garantiye alan güncellenmiş fonksiyon
+        function startExperience() {
+            const entryScreen = document.getElementById('entry-screen');
+            entryScreen.classList.add('fade-out');
+            
+            // Önce ses seviyesini ayarla ve yüklemeyi zorla
+            bgMusic.volume = 0.5;
+            bgMusic.load(); 
+            
+            // Tarayıcı kilitlerini esnetmek için doğrudan play tetiklemesi
+            const playPromise = bgMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log("Müzik başarıyla başladı.");
+                }).catch(error => {
+                    console.log("İlk tetiklemede tarayıcı engeli çıktı, alternatif yöntem deneniyor...", error);
+                    // Kullanıcı dokunduğu için engeli aşmak adına ikinci bir deneme
+                    document.body.addEventListener('click', () => {
+                        bgMusic.play();
+                    }, { once: true });
+                });
+            }
+
+            setTimeout(() => {
+                rotateWrapper.classList.add('visible');
+                showSlide(0);
+                startAutoPlay();
+            }, 500);
+        }
+
+        function showSlide(index) {
+            if (index >= quotes.length) {
+                return;
+            }
+
+            if (index < 0) {
+                currentIndex = 0;
+            } else {
+                currentIndex = index;
+            }
+
+            textElement.classList.remove('active');
+            
+            const isLastSlide = (currentIndex === quotes.length - 1);
+
+            if (isLastSlide) {
+                revealBtn.style.display = "block"; 
+                controls.classList.add('hidden'); 
+                progressBar.style.opacity = '0'; 
+                stopAutoPlay(); 
+                isPlaying = false; 
+            } else {
+                revealBtn.style.display = "none";
+                controls.classList.remove('hidden'); 
+                progressBar.style.opacity = '1';
+            }
+
+            setTimeout(() => {
+                if(quotes[currentIndex]) {
+                    textElement.innerText = quotes[currentIndex];
+                }
+                textElement.classList.add('active');
+            }, 300);
+
+            counter.innerText = `${currentIndex + 1} / ${quotes.length}`;
+            resetProgressBar();
+        }
+
+        function openProfile() {
+            stopAutoPlay(); 
+            rotateWrapper.classList.remove('visible'); 
+            controls.classList.add('hidden'); 
+            progressBar.style.opacity = '0';
+            
+            setTimeout(() => {
+                profileOverlay.classList.add('active'); 
+            }, 500);
+        }
+
+        function closeProfile() {
+            profileOverlay.classList.remove('active'); 
+            
+            setTimeout(() => {
+                rotateWrapper.classList.add('visible');
+                if (currentIndex !== quotes.length - 1) {
+                    controls.classList.remove('hidden');
+                    progressBar.style.opacity = '1';
+                    startAutoPlay(); 
+                } else {
+                    revealBtn.style.display = 'block';
+                }
+            }, 500);
+        }
+
+        function startAutoPlay() {
+            if(slideInterval) clearInterval(slideInterval);
+            slideInterval = setInterval(() => {
+                nextSlide();
+            }, slideDuration);
+            runProgressBar();
+        }
+
+        function stopAutoPlay() {
+            clearInterval(slideInterval);
+            clearInterval(progressInterval);
+            progressBar.style.width = '0%';
+        }
+
+        function nextSlide() {
+            if (currentIndex >= quotes.length - 1) return;
+            showSlide(currentIndex + 1);
+            if(isPlaying) startAutoPlay(); 
+        }
+
+        function prevSlide() {
+            showSlide(currentIndex - 1);
+            if(isPlaying) startAutoPlay();
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            if(isPlaying) {
+                playBtn.innerText = "॥";
+                startAutoPlay();
+                bgMusic.play();
+            } else {
+                playBtn.innerText = "▶";
+                stopAutoPlay();
+                bgMusic.pause();
+            }
+        }
+
+        function runProgressBar() {
+            if(progressInterval) clearInterval(progressInterval);
+            let width = 0;
+            const updateRate = 50; 
+            const step = 100 / (slideDuration / updateRate); 
+            
+            progressInterval = setInterval(() => {
+                width += step;
+                if(width >= 100) width = 0;
+                progressBar.style.width = width + '%';
+            }, updateRate);
+        }
+
+        function resetProgressBar() {
+            progressBar.style.width = '0%';
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (currentIndex === quotes.length - 1) return;
+
+            if (e.key === "ArrowRight") nextSlide();
+            if (e.key === "ArrowLeft") prevSlide();
+            if (e.key === " ") togglePlay();
+        });
+
+    </script>
+</body>
+</html>

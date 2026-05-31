@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QWMY8YQQ9Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-QWMY8YQQ9Q');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --turq: #00fff2;
+            --silver: #e0e0e0;
+            --gold: #ffd700;
+            --red: #ff4d4d;
+            --purple: #a18cd1;
+            --white: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        #canvas-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        .vignette {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 40%, #000 120%);
+            z-index: 1; pointer-events: none;
+        }
+
+        /* Minimalist Kapsül */
+        .glass-card {
+            position: relative; 
+            z-index: 10; 
+            background: rgba(8, 8, 12, 0.8); 
+            backdrop-filter: blur(25px); 
+            width: 85%;
+            max-width: 310px; /* Daha dar, daha kompakt */
+            padding: 1.8rem 1.2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            text-align: center; 
+            box-shadow: 0 0 40px rgba(0,0,0,0.9); 
+            overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; 
+            animation: float 8s ease-in-out infinite;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+
+        .glass-card h1 { 
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem; 
+            margin-bottom: 6px; 
+            letter-spacing: 4px;
+            color: var(--silver);
+        }
+        .glass-card p { 
+            font-size: 0.55rem; 
+            margin-bottom: 20px; 
+            color: rgba(255, 255, 255, 0.4); 
+            max-width: 90%;
+            line-height: 1.4;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Timer Düzeni */
+        .timer-wrapper { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
+        .time-unit { display: flex; flex-direction: column; align-items: center; min-width: 45px; }
+        .holo-number {
+            font-family: 'Cinzel', serif; 
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+        .time-label { font-size: 0.35rem; letter-spacing: 1px; color: rgba(255,255,255,0.3); margin-top: 2px; }
+
+        .heartbeat-wrapper {
+            width: 100%; height: 30px;
+            position: relative; display: flex; align-items: center; justify-content: center;
+            margin-bottom: 20px; opacity: 0.6;
+        }
+        .heartbeat-svg { width: 100%; height: 100%; }
+        .heartbeat-path-bg { fill: none; stroke: rgba(255, 255, 255, 0.05); stroke-width: 1; }
+        .heartbeat-path-pulse {
+            fill: none; stroke: var(--turq); stroke-width: 1.5;
+            stroke-dasharray: 200 1200; stroke-dashoffset: 1400;
+            animation: pulseTravel 3s linear infinite;
+        }
+        @keyframes pulseTravel { 0% { stroke-dashoffset: 1400; } 100% { stroke-dashoffset: 0; } }
+
+        /* Buton Grubu */
+        .button-group { display: flex; flex-direction: column; gap: 10px; width: 100%; } 
+        
+        .special-trigger-btn { 
+            position: relative; width: 100%; 
+            padding: 12px 14px; 
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px;
+            font-family: 'Cinzel', serif; 
+            font-size: 0.65rem; 
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.5); cursor: pointer; 
+            transition: all 0.4s ease;
+            display: flex; align-items: center; justify-content: space-between;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+
+        /* Özel Hover Renkleri */
+        .btn-yildizim:hover { border-color: #ffffff; color: #ffffff; box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); transform: translateX(3px); }
+        .btn-siluet:hover { border-color: var(--white); color: var(--white); box-shadow: 0 0 15px rgba(255,255,255,0.15); transform: translateX(3px); }
+        .btn-kulliyat:hover { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 15px rgba(255, 215, 0, 0.15); transform: translateX(3px); }
+        .btn-atolye:hover { border-color: var(--red); color: var(--red); box-shadow: 0 0 15px rgba(255, 77, 77, 0.15); transform: translateX(3px); }
+        .btn-nida:hover { border-color: var(--purple); color: var(--purple); box-shadow: 0 0 15px rgba(161, 140, 209, 0.15); transform: translateX(3px); }
+        .btn-frekans:hover { border-color: var(--turq); color: var(--turq); box-shadow: 0 0 15px rgba(0, 255, 242, 0.15); transform: translateX(3px); }
+
+        .btn-icon { font-size: 0.8rem; opacity: 0.7; }
+        .btn-arrow { font-size: 0.5rem; opacity: 0; transition: 0.3s; }
+        .special-trigger-btn:hover .btn-arrow { opacity: 1; }
+
+        .shooting-star {
+            position: absolute; height: 1px; 
+            background: linear-gradient(-45deg, rgba(255,255,255,0), rgba(255,255,255,0.8), rgba(255,255,255,0));
+            animation: shoot 3s ease-out forwards; z-index: 6; opacity: 0; pointer-events: none;
+        }
+        @keyframes shoot { 0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 1; width: 0; } 100% { transform: translateX(-800px) translateY(800px) rotate(-45deg); opacity: 0; width: 0; } }
+
+        @media (max-width: 768px) {
+            .glass-card { width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-bg"></canvas> 
+    <div class="vignette"></div>
+
+    <audio id="finalMusic" src="yıldız.mp3" loop preload="auto"></audio>
+
+    <div class="glass-card">
+        <h1>VAROLUŞ KAYDI</h1>
+        <p>Kaosun içinde düzen arayan bir zihin.</p>
+
+        <div class="timer-wrapper">
+            <div class="time-unit"><span id="days" class="holo-number">00</span><span class="time-label">GÜN</span></div>
+            <div class="time-unit"><span id="hours" class="holo-number">00</span><span class="time-label">SAAT</span></div>
+            <div class="time-unit"><span id="minutes" class="holo-number">00</span><span class="time-label">DAK</span></div>
+            <div class="time-unit"><span id="seconds" class="holo-number">00</span><span class="time-label">SAN</span></div>
+        </div>
+        
+        <div class="heartbeat-wrapper">
+            <svg class="heartbeat-svg" viewBox="0 0 600 100" preserveAspectRatio="none">
+                <path id="heart-path-bg" class="heartbeat-path-bg" d="M0,50 L600,50" />
+                <path id="heart-path-pulse" class="heartbeat-path-pulse" d="M0,50 L600,50" />
+            </svg>
+        </div>
+
+        <div class="button-group">
+            <button class="special-trigger-btn btn-yildizim" onclick="window.location.href='yildizim.html'">
+                <span class="btn-icon">✨</span> 
+                YILDIZIM 
+                <span class="btn-arrow">➔</span>
+            </button>
+
+            <button class="special-trigger-btn btn-siluet" onclick="window.location.href='siluet'">
+                <span class="btn-icon">👤</span> 
+                SİLÜET 
+                <span class="btn-arrow">➔</span>
+            </button>
+
+            <button class="special-trigger-btn btn-kulliyat" onclick="window.location.href='kulliyat'">
+                <span class="btn-icon">📜</span> 
+                KÜLLİYAT 
+                <span class="btn-arrow">➔</span>
+            </button>
+
+            <button class="special-trigger-btn btn-atolye" onclick="window.location.href='atolye'">
+                <span class="btn-icon">⚙️</span> 
+                ATÖLYE 
+                <span class="btn-arrow">➔</span>
+            </button>
+
+            <button class="special-trigger-btn btn-nida" onclick="window.location.href='nida'">
+                <span class="btn-icon">🎙️</span> 
+                NİDA 
+                <span class="btn-arrow">➔</span>
+            </button>
+
+            <button class="special-trigger-btn btn-frekans" onclick="window.location.href='frekans'">
+                <span class="btn-icon">📡</span> 
+                FREKANS 
+                <span class="btn-arrow">➔</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        let width, height, stars = [];
+        function resizeCanvas() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
+        class Star {
+            constructor() { this.reset(); }
+            reset() { this.x = (Math.random() - 0.5) * width * 2; this.y = (Math.random() - 0.5) * height * 2; this.z = Math.random() * width; }
+            update() { this.z -= 0.5; if (this.z < 1) { this.reset(); this.z = width; } }
+            draw() {
+                let sx = (width/2) + (this.x / this.z) * (width/2);
+                let sy = (height/2) + (this.y / this.z) * (height/2);
+                const depth = (1 - this.z / width);
+                ctx.fillStyle = `rgba(255, 255, 255, ${depth})`;
+                ctx.beginPath(); ctx.arc(sx, sy, depth * 1.5, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+        for (let i = 0; i < 800; i++) stars.push(new Star());
+        function animate() { ctx.fillStyle = "rgba(0, 0, 0, 0.4)"; ctx.fillRect(0, 0, width, height); stars.forEach(s => { s.update(); s.draw(); }); requestAnimationFrame(animate); }
+        animate();
+
+        window.addEventListener('click', () => {
+            const music = document.getElementById("finalMusic");
+            if (music.paused) music.play();
+        }, { once: true });
+
+        function createShootingStar() {
+            const container = document.body;
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            star.style.top = Math.random() * 50 + '%';
+            star.style.left = (Math.random() * 40 + 60) + '%';
+            container.appendChild(star);
+            setTimeout(() => star.remove(), 3000);
+        }
+        setInterval(createShootingStar, 5000);
+
+        // Doğum tarihine göre ayarlandı
+        const birthDate = new Date("2002-10-06T00:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = now - birthDate; 
+            document.getElementById('days').innerText = String(Math.floor(diff / 86400000)).padStart(2, '0');
+            document.getElementById('hours').innerText = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+        }, 1000);
+
+        const bgPath = document.getElementById('heart-path-bg');
+        const pulsePath = document.getElementById('heart-path-pulse');
+
+        function generateSystemPulse() {
+            const totalWidth = 600;
+            const centerY = 50;
+            const beatStart = Math.floor(Math.random() * 300) + 100; 
+            let path = `M0,${centerY} L${beatStart},${centerY}`;
+            path += ` L${beatStart+10},${centerY - 20} L${beatStart+20},${centerY + 20}`;
+            path += ` L${beatStart+30},10 L${beatStart+40},90 L${beatStart+50},${centerY}`;
+            path += ` L${totalWidth},${centerY}`;
+            return path;
+        }
+
+        pulsePath.addEventListener('animationiteration', () => {
+            const newPath = generateSystemPulse();
+            bgPath.setAttribute('d', newPath);
+            pulsePath.setAttribute('d', newPath);
+        });
+
+        window.addEventListener('load', () => {
+            const newPath = generateSystemPulse();
+            bgPath.setAttribute('d', newPath);
+            pulsePath.setAttribute('d', newPath);
+        });
+    </script>
+</body>
+</html>

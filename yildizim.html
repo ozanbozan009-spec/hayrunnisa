@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QWMY8YQQ9Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-QWMY8YQQ9Q');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ELGÜN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --turq: #00fff2;
+            --pink: #ff7eb3;
+            --silver: #e0e0e0;
+            --gold: #ffd700;
+            --red: #ff4d4d;
+            --purple: #a18cd1;
+            --rosebg: linear-gradient(-45deg, #ff9a9e, #fecfef, #f5576c, #a18cd1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: #000;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        #canvas-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        .vignette { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 40%, #000 120%); z-index: 1; pointer-events: none; }
+        #intro-bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1e293b 0%, #020207 100%); z-index: 5; transition: opacity 2s ease; }
+        
+        /* Bulutsu Arka Plan */
+        #nebula-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--rosebg); background-size: 400% 400%;
+            animation: nebulaMove 20s ease infinite; z-index: 1; opacity: 0;
+            transition: opacity 3s ease; pointer-events: none;
+        }
+        @keyframes nebulaMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        /* Giriş Ekranı Tasarımı */
+        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease; padding: 20px; }
+        #login-particles-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
+        .login-particle { position: absolute; top: -5vh; color: rgba(255, 255, 255, 0.9); text-shadow: 0 0 8px rgba(255, 215, 0, 0.4); animation: fallParticle linear forwards; z-index: 1; font-family: serif; }
+        @keyframes fallParticle { to { transform: translateY(105vh) rotate(360deg); } }
+
+        /* Bıcır Bıcır, Tatlı ve Premium Pembe Cam Giriş Kartı */
+        .login-card { 
+            position: relative; z-index: 10; text-align: center; width: 100%; max-width: 310px; 
+            padding: 2.2rem 1.4rem; 
+            background: linear-gradient(135deg, rgba(255, 240, 245, 0.15), rgba(255, 182, 193, 0.22)); 
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+            border-radius: 32px; border: 1px solid rgba(255, 105, 180, 0.4);
+            animation: floatCard 8s ease-in-out infinite;
+            box-shadow: 0 30px 80px rgba(255, 105, 180, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.25);
+            display: flex; flex-direction: column; align-items: center;
+        }
+        @keyframes floatCard { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        /* Şık ve Yumuşak Pembe Konturlu Input Alanı */
+        #passwordInput { 
+            background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 182, 193, 0.4); border-radius: 16px; 
+            color: #fff; text-align: center; font-size: 0.85rem; padding: 12px; width: 100%; outline: none; 
+            letter-spacing: 4px; margin-bottom: 18px; transition: all 0.4s ease; 
+            box-shadow: inset 0 1px 5px rgba(0,0,0,0.1);
+        }
+        #passwordInput::placeholder { color: rgba(255, 255, 255, 0.7); }
+        #passwordInput:focus {
+            border-color: #ff69b4; background: rgba(255, 255, 255, 0.25); box-shadow: 0 0 15px rgba(255, 105, 180, 0.4);
+        }
+        
+        /* Bıcır Bıcır Pamuk Şeker Buton */
+        .login-card button { 
+            width: 100%; padding: 13px; 
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); 
+            border: none; border-radius: 16px; 
+            color: #fff; font-family: 'Cinzel', serif; font-weight: 700; 
+            font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.4s ease; 
+            box-shadow: 0 8px 25px rgba(255, 154, 158, 0.4);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .login-card button:hover { 
+            background: linear-gradient(135deg, #fecfef 0%, #ff9a9e 100%); 
+            box-shadow: 0 12px 25px rgba(255, 105, 180, 0.55); transform: translateY(-2px); letter-spacing: 3px; 
+        }
+        
+        #login-error { color: #ff6b6b; font-family: 'Cinzel', serif; font-size: 0.75rem; font-weight: 700; margin-top: 15px; opacity: 0; letter-spacing: 2px; text-shadow: 0 0 15px rgba(255, 50, 50, 0.5); background: rgba(255, 0, 0, 0.05); padding: 8px 15px; border-radius: 15px; border: 1px solid rgba(255, 50, 50, 0.2); transform: translateY(10px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: inline-block; }
+        #login-error.show { opacity: 1; transform: translateY(0); }
+
+        /* Kalp Eşleşme İntrosu */
+        #heart-intro { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9998; display: none; flex-direction: column; justify-content: center; align-items: center; }
+        #white-flash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 20000; opacity: 0; pointer-events: none; transition: opacity 3s ease-out; }
+        #white-flash-overlay.flash-instant { transition: none !important; opacity: 1 !important; }
+        .pulse-container { position: relative; width: 100%; max-width: 400px; height: 200px; display: flex; justify-content: center; align-items: center; }
+        .pulse-container.shaking { animation: violentShake 0.5s infinite linear; }
+        .heart-node { width: 25px; height: 25px; border-radius: 50%; position: absolute; box-shadow: 0 0 30px currentColor; z-index: 2; }
+        .node-left { background-color: var(--turq); color: var(--turq); left: 10%; animation: beat-left 1.5s infinite ease-in-out; transition: left 8s cubic-bezier(0.5, 0, 0.2, 1); }
+        .node-right { background-color: var(--pink); color: var(--pink); right: 10%; animation: beat-right 1.1s infinite ease-in-out; transition: right 8s cubic-bezier(0.5, 0, 0.2, 1); }
+        .ecg-line { position: absolute; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); }
+        .intro-status { margin-top: 60px; color: rgba(255,255,255,0.5); letter-spacing: 6px; text-transform: uppercase; font-size: 0.9rem; animation: textPulse 2s infinite; }
+        @keyframes beat-left { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.4); opacity: 1; } }
+        @keyframes beat-right { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.4); opacity: 1; } }
+        @keyframes beat-fast { 0%, 100% { transform: scale(1.3); opacity: 1; } 50% { transform: scale(0.8); opacity: 0.9; } }
+        @keyframes violentShake { 0% { transform: translate(0,0); } 25% { transform: translate(-4px, 4px) rotate(-1deg); } 75% { transform: translate(4px, -4px) rotate(1deg); } }
+        @keyframes textPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        .pulse-container.merging .node-left { left: 45%; animation: beat-fast 0.2s infinite; }
+        .pulse-container.merging .node-right { right: 45%; animation: beat-fast 0.2s infinite; }
+        .festive-icon { font-size: 2.5rem; margin-bottom: 15px; color: #ffdfba; filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4)); }
+
+        /* MOBİL UYUMLU ŞEFFAF KAPSÜL (Maksimum yükseklik ayarı ve scroll desteği eklendi) */
+        .glass-card {
+            position: relative; z-index: 10; 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            width: 90%; max-width: 320px; 
+            max-height: 85vh; max-height: 85dvh; /* Çok küçük ekranlarda taşmasın */
+            overflow-y: auto; /* İçerik çok uzarsa kendi içinde güvenle kaydırılabilsin diye */
+            scrollbar-width: none; /* Firefox için çirkin scrollbar'ı gizle */
+            padding: 1.5rem 1.1rem; 
+            border-radius: 32px; 
+            border: 1px solid rgba(255, 255, 255, 0.12); 
+            text-align: center; 
+            box-shadow: 0 30px 100px rgba(255, 126, 179, 0.15); 
+            opacity: 0; transform: scale(0.95); transition: all 1.5s ease; display: none; 
+            flex-direction: column; align-items: center; 
+        }
+        .glass-card::-webkit-scrollbar { display: none; } /* Chrome/Safari için çirkin scrollbar'ı gizle */
+        .glass-card.active { opacity: 1; transform: scale(1); animation: float 8s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-6px); } }
+
+        /* HOLOGRAFİK AURA KÜRESİ */
+        .aura-orb {
+            width: 45px; height: 45px;
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,126,179,0.3) 50%, transparent 100%);
+            border-radius: 50%; margin-bottom: 15px;
+            filter: drop-shadow(0 0 12px rgba(255, 126, 179, 0.6));
+            animation: orbBreathe 4s ease-in-out infinite;
+        }
+        @keyframes orbBreathe {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 12px rgba(255, 126, 179, 0.6)); opacity: 0.8; }
+            50% { transform: scale(1.15); filter: drop-shadow(0 0 20px rgba(0, 255, 242, 0.7)); opacity: 1; }
+        }
+
+        /* PREMIUM SILK SHIMMER ANIMATION */
+        .glass-card h1, .login-title { 
+            font-family: 'Cinzel', serif; 
+            font-size: 1.45rem; 
+            margin-bottom: 10px; 
+            letter-spacing: 6px; 
+            display: inline-block;
+            background: linear-gradient(90deg, #ffffff 0%, #ffb6c1 25%, #ffffff 50%, #ff7eb3 75%, #ffffff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: eliteShimmer 4.5s linear infinite;
+        }
+        @keyframes eliteShimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* YALIN VE TEK KALEMDE AKAN METİN AYARI */
+        .glass-card .motto-text { 
+            font-size: 0.55rem; 
+            margin-bottom: 18px; 
+            color: rgba(255, 255, 255, 0.6); 
+            max-width: 95%; 
+            line-height: 1.6; 
+            text-transform: uppercase; 
+            letter-spacing: 0.8px; 
+        }
+
+        /* Modüler İç Ekranlar */
+        .inner-screen { display: none; width: 100%; animation: fadeInInner 0.5s ease forwards; margin-bottom: 12px; }
+        @keyframes fadeInInner { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .timeline { display: flex; flex-direction: column; gap: 10px; text-align: left; padding: 5px 5px; width: 100%; }
+        .timeline-item { position: relative; padding-left: 15px; border-left: 1px dashed rgba(255,255,255,0.2); }
+        .timeline-item::before { content: '•'; position: absolute; left: -3px; top: -2px; color: var(--pink); font-size: 0.9rem; text-shadow: 0 0 5px var(--pink); }
+        .timeline-title { font-family: 'Cinzel', serif; font-size: 0.55rem; font-weight: bold; color: var(--pink); letter-spacing: 1px; }
+        .timeline-desc { font-size: 0.5rem; color: rgba(255,255,255,0.7); margin-top: 2px; line-height: 1.3; }
+
+        .info-box { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px; font-size: 0.55rem; line-height: 1.4; color: rgba(255,255,255,0.8); text-align: center; backdrop-filter: blur(5px); }
+        .distance-line { margin: 10px 0; font-size: 0.6rem; letter-spacing: 1px; color: var(--pink); text-shadow: 0 0 5px rgba(255,126,179,0.5); }
+
+        .archive-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+        .polaroid { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 6px; border-radius: 8px; text-align: center; }
+        .polaroid-img-placeholder { width: 100%; height: 65px; background: rgba(0,0,0,0.2); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: rgba(255,255,255,0.2); }
+        .polaroid p { font-size: 0.45rem; color: rgba(255,255,255,0.5); margin-top: 4px; text-transform: none; letter-spacing: 0; font-style: italic; }
+
+        /* Şık Kapsül Butonları */
+        .button-group { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+        .special-trigger-btn { 
+            position: relative; width: 100%; padding: 11px 12px; 
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px;
+            font-family: 'Cinzel', serif; font-size: 0.6rem; font-weight: 700;
+            color: rgba(255, 255, 255, 0.6); cursor: pointer; transition: all 0.4s ease;
+            display: flex; align-items: center; justify-content: space-between; text-transform: uppercase; letter-spacing: 1.5px;
+        }
+        .btn-love:hover { border-color: #ff69b4; color: #ff69b4; box-shadow: 0 0 15px rgba(255,105,180,0.2); transform: translateX(3px); }
+        .btn-sky:hover { border-color: var(--turq); color: var(--turq); box-shadow: 0 0 15px rgba(0,255,242,0.2); transform: translateX(3px); }
+        .btn-universe:hover { border-color: #ffd700; color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.2); transform: translateX(3px); }
+        .btn-distance:hover { border-color: #a18cd1; color: #a18cd1; box-shadow: 0 0 15px rgba(161,140,209,0.2); transform: translateX(3px); }
+        .btn-archive:hover { border-color: #ff4d4d; color: #ff4d4d; box-shadow: 0 0 15px rgba(255,77,77,0.2); transform: translateX(3px); }
+        .btn-back { border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); margin-top: 5px; justify-content: center; gap: 5px; font-size: 0.55rem; padding: 6px; border-radius: 10px; }
+        .btn-back:hover { border-color: #fff; color: #fff; }
+        .btn-icon { font-size: 0.75rem; opacity: 0.7; }
+        .btn-arrow { font-size: 0.45rem; opacity: 0; transition: 0.3s; }
+        .special-trigger-btn:hover .btn-arrow { opacity: 1; }
+
+        /* Fısıltı Modülü */
+        .compliment-container { margin-top: 12px; width: 100%; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; flex-shrink: 0; }
+        .magic-btn { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); padding: 6px 12px; border-radius: 20px; font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 1px; cursor: pointer; transition: all 0.3s; width: 100%; }
+        .magic-btn:hover { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.2); }
+        #compliment-text { min-height: 24px; margin-top: 8px; font-size: 0.55rem; color: rgba(255,255,255,0.75); font-style: italic; opacity: 0; transform: translateY(5px); transition: all 0.5s ease; line-height: 1.3; }
+        #compliment-text.show { opacity: 1; transform: translateY(0); }
+
+        .shooting-star { position: absolute; height: 1px; background: linear-gradient(-45deg, rgba(255,255,255,0), rgba(255,255,255,0.8), rgba(255,255,255,0)); animation: shoot 3s ease-out forwards; z-index: 6; opacity: 0; pointer-events: none; }
+        @keyframes shoot { 0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 1; width: 0; } 100% { transform: translateX(-800px) translateY(800px) rotate(-45deg); opacity: 0; width: 0; } }
+
+        /* Nihai Mektup Ekranı (Mobil Uyumluluk) */
+        #pink-universe { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--rosebg); background-size: 400% 400%; animation: nebulaMove 12s ease infinite; z-index: 20; display: none; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+        .crystal-frame { position: relative; width: 90%; max-width: 310px; max-height: 85vh; max-height: 85dvh; overflow-y: auto; scrollbar-width: none; padding: 22px 15px; background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); text-align: center; animation: floatLetter 6s ease-in-out infinite; }
+        .crystal-frame::-webkit-scrollbar { display: none; }
+        @keyframes floatLetter { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .beating-red-heart { position: relative; width: 40px; height: 35px; margin: 0 auto 15px; animation: heartBeatFast 1s ease-in-out infinite; flex-shrink: 0; }
+        .beating-red-heart::before, .beating-red-heart::after { content: ""; position: absolute; left: 20px; top: 0; width: 20px; height: 33px; background: linear-gradient(to bottom, #ff3366, #ff6699); border-radius: 20px 20px 0 0; transform: rotate(-45deg); transform-origin: 0 100%; }
+        .beating-red-heart::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
+        @keyframes heartBeatFast { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        .letter-content { font-size: 0.65rem; line-height: 1.6; font-weight: 400; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.2); text-align: center; }
+        .letter-line { opacity: 0; transform: translateY(10px); transition: all 1.5s ease; margin-bottom: 10px; }
+        .letter-line.reveal { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-bg"></canvas> 
+    <div id="nebula-overlay"></div>
+    <div id="intro-bg-layer"></div>
+    <div class="vignette"></div>
+    <div id="white-flash-overlay"></div>
+
+    <!-- Müzik Etiketleri -->
+    <audio id="bileMusic" src="bile.mp3" loop preload="auto"></audio>
+    <audio id="bizimMusic" src="bizimm.mp3" loop preload="auto"></audio>
+
+    <!-- GİRİŞ EKRANI (Bıcır Bıcır & Pamuk Şeker Prenses Tasarımı) -->
+    <div id="login-screen">
+        <div id="login-particles-container"></div>
+        <div class="login-card" id="loginCardElement">
+            <div class="festive-icon">🎀</div>
+            <h2 class="login-title">ÖMRÜM</h2>
+            <p style="font-size:0.55rem; color:#fff5f7; margin-bottom:20px; margin-top:6px; font-weight:300; max-width: 240px; line-height: 1.5; text-transform: uppercase; letter-spacing: 0.8px;">Milyarlarca ihtimal arasından beni bulan en güzel mucizeme, kalbimin kapılarını açmak için...</p>
+            <input type="password" id="passwordInput" placeholder="Şifre..." autocomplete="off">
+            <button onclick="attemptLogin()">KAPILARI AÇ</button>
+            <p id="login-error">❌ HATALI ŞİFRE PRENSES</p>
+        </div>
+    </div>
+
+    <!-- S S S S S S S S S S -->
+    <div id="heart-intro">
+        <div class="pulse-container" id="pulseContainer">
+            <div class="ecg-line"></div>
+            <div class="heart-node node-left"></div>
+            <div class="heart-node node-right"></div>
+        </div>
+        <div class="intro-status" id="introText">Frekans Aranıyor...</div>
+    </div>
+
+    <!-- ANA PANEL KARTI -->
+    <div class="glass-card">
+
+        <h1>ELGÜN</h1>
+        <p class="motto-text">Tam 5 yıldır zihnimi susturabilen tek gerçek. Milyonlarca ihtimal arasından birbirini bulan en güzel iki nokta.</p>
+
+        <!-- 1. EKRAN: ANA MENÜ -->
+        <div id="menu-screen" class="button-group" style="display: flex;">
+            <button class="special-trigger-btn btn-love" onclick="triggerClimax()">
+                <span class="btn-icon">💖</span> BİZİM DÜNYAMIZ <span class="btn-arrow">➔</span>
+            </button>
+            <button class="special-trigger-btn btn-sky" onclick="switchScreen('sky')">
+                <span class="btn-icon">🚀</span> EVRENİM <span class="btn-arrow">➔</span>
+            </button>
+            <button class="special-trigger-btn btn-archive" onclick="switchScreen('archive')">
+                <span class="btn-icon">🎞️</span> KALBİMİN ARŞİVİ <span class="btn-arrow">➔</span>
+            </button>
+        </div>
+
+        <!-- 2. EKRAN: AŞK KAYITLARI -->
+        <div id="love-screen" class="inner-screen">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-title">O İLK AN</div>
+                    <div class="timeline-desc">Bir tesadüfün hayatımı tamamen yönlendireceğini bilmediğim o saniye.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-title">İLK CÜMLELER</div>
+                    <div class="timeline-desc">Kelimelerin aramızda kurduğu o ilk sessiz ama derin bağ.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-title">BİZİM MİLADIMIZ</div>
+                    <div class="timeline-desc">Dışarıdaki tüm gürültünün sustuğu, seninle anlam kazandığım gün.</div>
+                </div>
+            </div>
+            <button class="special-trigger-btn btn-back" onclick="switchScreen('menu')">◀ GERİ DÖN</button>
+        </div>
+
+        <!-- 3. EKRAN: GÖKYÜZÜMÜZ -->
+        <div id="sky-screen" class="inner-screen">
+            <div class="info-box" style="margin-bottom: 12px;">
+                <span style="font-size: 1rem;">✨</span><br>
+                Seninle aynı gökyüzünün altında olmak, bu devasa ve kaotik evrende başıma gelebilecek en asil şans. Yıldızlar sadece yukarıda değil, senin gülüşünde.
+            </div>
+            <!-- EVRENE GİRİŞ BUTONU -->
+            <button class="special-trigger-btn btn-universe" onclick="evreneGiris()" style="margin-bottom: 5px;">
+                <span class="btn-icon">🌌</span> EVRENE GİRİŞ <span class="btn-arrow">➔</span>
+            </button>
+            <button class="special-trigger-btn btn-back" onclick="switchScreen('menu')">◀ GERİ DÖN</button>
+        </div>
+
+        <!-- 4. EKRAN: MESAFELER -->
+        <div id="distance-screen" class="inner-screen">
+            <div class="info-box">
+                <strong>SEN</strong>
+                <div class="distance-line">•────────────────💖────────────────•</div>
+                <strong>BEN</strong>
+                <p style="margin-top: 8px; font-size: 0.5rem; color: rgba(255,255,255,0.6);">Haritalar sadece mesafeleri ölçer sevgilim, kalpleri değil. Zihnimin attığı her adımda yönüm sadece sensin.</p>
+            </div>
+            <button class="special-trigger-btn btn-back" onclick="switchScreen('menu')">◀ GERİ DÖN</button>
+        </div>
+
+        <!-- 5. EKRAN: ARŞİVİMİZ -->
+        <div id="archive-screen" class="inner-screen">
+            <div class="archive-grid" style="margin-bottom: 12px;">
+                <div class="polaroid">
+                    <div class="polaroid-img-placeholder">📸</div>
+                    <p>En Güzel Gün</p>
+                </div>
+                <div class="polaroid">
+                    <div class="polaroid-img-placeholder">✨</div>
+                    <p>İlk Gülüş</p>
+                </div>
+            </div>
+            <!-- ARŞİVE GİRİŞ BUTONU -->
+            <button class="special-trigger-btn btn-archive" onclick="kalbimeGiris()" style="margin-bottom: 5px;">
+                <span class="btn-icon">🎞️</span> ARŞİVE GİRİŞ <span class="btn-arrow">➔</span>
+            </button>
+            <button class="special-trigger-btn btn-back" onclick="switchScreen('menu')">◀ GERİ DÖN</button>
+        </div>
+
+        <!-- SİHİRLİ FISILTI BUTONU -->
+        <div class="compliment-container">
+            <button class="magic-btn" onclick="showLoveNote()"><span>sana bir mesajım var</span></button>
+            <p id="compliment-text">"Butona dokun sevgilim..."</p>
+        </div>
+    </div>
+
+    <!-- NİHAİ MEKTUP EKRANI -->
+    <div id="pink-universe">
+        <div class="crystal-frame">
+            <div class="beating-red-heart"></div>
+            <div class="letter-content">
+                <div class="letter-line">ELGÜN...</div>
+                <div class="letter-line">Burası zamanın ve mekânın bittiği yer.</div>
+                <div class="letter-line">Dışarıda nasıl bir kaos olursa olsun,</div>
+                <div class="letter-line">zihnimin sığındığı tek gerçek sensin.</div>
+                <div class="letter-line">Milyarlarca insan arasından</div>
+                <div class="letter-line">birbirini bulan iki yörüngeyken,</div>
+                <div class="letter-line">iyi ki benim dünyam oldun.</div>
+                <div class="letter-line" style="color: var(--pink); font-weight: bold; font-family:'Cinzel'; margin-top:15px; letter-spacing:1px;">Seni Çok Seviyorum.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas-bg'); const ctx = canvas.getContext('2d');
+        let width, height, stars = [];
+        function resizeCanvas() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
+        class Star {
+            constructor() { this.reset(); }
+            reset() { this.x = (Math.random() - 0.5) * width * 2; this.y = (Math.random() - 0.5) * height * 2; this.z = Math.random() * width; }
+            update() { this.z -= 0.5; if (this.z < 1) { this.reset(); this.z = width; } }
+            draw() {
+                let sx = (width/2) + (this.x / this.z) * (width/2); let sy = (height/2) + (this.y / this.z) * (height/2);
+                const depth = (1 - this.z / width); ctx.fillStyle = `rgba(255, 255, 255, ${depth})`;
+                ctx.beginPath(); ctx.arc(sx, sy, depth * 1.5, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+        for (let i = 0; i < 800; i++) stars.push(new Star());
+        function animate() { ctx.fillStyle = "rgba(0, 0, 0, 0.4)"; ctx.fillRect(0, 0, width, height); stars.forEach(s => { s.update(); s.draw(); }); requestAnimationFrame(animate); }
+        animate();
+
+        let loginParticleInterval;
+        function createLoginParticle() {
+            const container = document.getElementById('login-particles-container'); if (!container) return;
+            const particle = document.createElement('div'); particle.className = 'login-particle';
+            const types = ['❤️','❤️', '🤍','🤍','❆','❆']; particle.innerText = types[Math.floor(Math.random() * types.length)];
+            const size = Math.random() * 8 + 8; particle.style.fontSize = `${size}px`; particle.style.left = Math.random() * 100 + 'vw';
+            const duration = Math.random() * 8 + 12; particle.style.animationDuration = `${duration}s`; particle.style.opacity = Math.random() * 0.4 + 0.3;
+            container.appendChild(particle); setTimeout(() => { particle.remove(); }, duration * 1000);
+        }
+        function startLoginEffects() { loginParticleInterval = setInterval(createLoginParticle, 950); for(let i=0; i<6; i++) setTimeout(createLoginParticle, i*400); }
+        function stopLoginEffects() { clearInterval(loginParticleInterval); }
+        window.addEventListener('load', startLoginEffects);
+
+        function attemptLogin() {
+            const pass = document.getElementById("passwordInput").value.toLowerCase().trim();
+            const err = document.getElementById("login-error");
+            
+            if (btoa(pass.replace(/ı/g, 'i')) === "Y2FuYW5pbXNpbm5u") {
+                stopLoginEffects();
+                
+                document.getElementById("bileMusic").play().catch(error => { console.log("Müzik oynatılamadı", error); });
+                
+                document.getElementById("login-screen").style.opacity = '0';
+                setTimeout(() => { document.getElementById("login-screen").style.display = 'none'; }, 500);
+                const introLayer = document.getElementById('heart-intro');
+                const pulseContainer = document.getElementById('pulseContainer');
+                const introText = document.getElementById('introText');
+                const flashOverlay = document.getElementById('white-flash-overlay');
+                const mainContent = document.querySelector('.glass-card');
+                const introBg = document.getElementById('intro-bg-layer'); 
+                const nebula = document.getElementById('nebula-overlay');
+                introLayer.style.display = 'flex'; 
+                setTimeout(() => { pulseContainer.classList.add('merging'); introText.innerText = "Kalpler Eşleşiyor..."; }, 2000);
+                setTimeout(() => { pulseContainer.classList.add('shaking'); introText.innerText = "BAĞLANTI KURULUYOR..."; introText.style.color = "#ff7eb3"; }, 9000);
+                setTimeout(() => {
+                    flashOverlay.classList.add('flash-instant'); introLayer.style.display = 'none'; introBg.style.opacity = '0'; 
+                    
+                    nebula.style.opacity = "1";
+                    mainContent.style.display = 'flex'; 
+                    setTimeout(() => mainContent.classList.add('active'), 100);
+                    requestAnimationFrame(() => { flashOverlay.classList.remove('flash-instant'); flashOverlay.style.opacity = '0'; });
+                    setTimeout(() => { flashOverlay.style.display = 'none'; }, 3000); setTimeout(() => { introBg.style.display = 'none'; }, 2000); 
+                }, 12000);
+            } else {
+                err.classList.add("show"); err.classList.add("error-shake"); 
+                setTimeout(() => { err.classList.remove("error-shake"); }, 400); setTimeout(() => { err.classList.remove("show"); }, 2000);
+            }
+        }
+        document.getElementById("passwordInput").addEventListener("keypress", (e) => { if(e.key === "Enter") attemptLogin(); });
+
+        function switchScreen(screenName) {
+            const menu = document.getElementById('menu-screen'); const love = document.getElementById('love-screen'); const sky = document.getElementById('sky-screen'); const distance = document.getElementById('distance-screen'); const archive = document.getElementById('archive-screen');
+            menu.style.display = 'none'; love.style.display = 'none'; sky.style.display = 'none'; distance.style.display = 'none'; archive.style.display = 'none';
+            if(screenName === 'menu') menu.style.display = 'flex';
+            else if(screenName === 'love') love.style.display = 'block';
+            else if(screenName === 'sky') sky.style.display = 'block';
+            else if(screenName === 'distance') distance.style.display = 'block';
+            else if(screenName === 'archive') archive.style.display = 'block';
+        }
+
+        function createShootingStar() {
+            const star = document.createElement('div'); star.className = 'shooting-star';
+            star.style.top = Math.random() * 40 + '%'; star.style.left = (Math.random() * 30 + 70) + '%';
+            document.body.appendChild(star); setTimeout(() => star.remove(), 3000);
+        }
+        setInterval(createShootingStar, 5000);
+
+        const loveNotes = [
+            "Gülüşün, bu evrendeki tüm o kaotik gürültüyü pürüzsüzce susturuyor.",
+            "Dışarıda nasıl bir koşturmaca olursa olsun, kafamı sana yasladığım an her şey duruyor.",
+            "Milyarlarca insan içinden senin frekansına denk gelmek, bu hayattaki tek büyük zaferim.",
+            "Buraya ikimiz için minik bir sığınak kurdum. Çünkü sen benim güvenli alanımsın.",
+            "Gözlerinin içine baktığımda, geçen tüm o yılları ve saniyeleri unutuyorum."
+        ];
+        function showLoveNote() {
+            const txt = document.getElementById("compliment-text"); txt.classList.remove("show");
+            setTimeout(() => { const idx = Math.floor(Math.random() * loveNotes.length); txt.innerText = `"${loveNotes[idx]}"`; txt.classList.add("show"); }, 300);
+        }
+
+        let experienceActive = false;
+        function triggerClimax() {
+            document.querySelector(".glass-card").style.opacity = "0";
+            setTimeout(() => {
+                document.querySelector(".glass-card").style.display = "none";
+                document.getElementById("pink-universe").style.display = "flex";
+                
+                document.getElementById("bileMusic").pause();
+                const bm = document.getElementById("bizimMusic"); bm.volume = 0.6; bm.play();
+                
+                const lines = document.querySelectorAll('.letter-line');
+                lines.forEach((line, index) => { setTimeout(() => { line.classList.add('reveal'); }, index * 2200); });
+            }, 1000);
+            setInterval(createYumosHeart, 500); setInterval(createSnowFlake, 300);
+        }
+        function createYumosHeart() {
+            const h = document.createElement('div'); h.innerText = '❤️'; h.style.position = 'absolute'; h.style.top = '-50px'; h.style.left = Math.random() * 100 + 'vw'; h.style.fontSize = Math.random() * 15 + 10 + 'px'; h.style.opacity = Math.random() * 0.6 + 0.4; h.style.pointerEvents = 'none'; h.style.zIndex = '22'; h.style.transition = 'transform 6s linear, opacity 6s linear'; document.getElementById('pink-universe').appendChild(h);
+            setTimeout(() => { h.style.transform = `translateY(${window.innerHeight + 100}px) rotate(${Math.random() * 360}deg)`; }, 50); setTimeout(() => h.remove(), 6000);
+        }
+        function createSnowFlake() {
+            const s = document.createElement('div'); s.innerText = '❆'; s.style.position = 'absolute'; s.style.top = '-50px'; s.style.left = Math.random() * 100 + 'vw'; s.style.fontSize = Math.random() * 12 + 8 + 'px'; s.style.opacity = Math.random() * 0.5 + 0.3; s.style.pointerEvents = 'none'; s.style.zIndex = '21'; s.style.transition = 'transform 8s linear, opacity 8s linear'; document.getElementById('pink-universe').appendChild(s);
+            setTimeout(() => { s.style.transform = `translateY(${window.innerHeight + 100}px) rotate(${Math.random() * 180}deg)`; }, 50); setTimeout(() => s.remove(), 8000);
+        }
+
+        function evreneGiris() {
+            window.location.href = 'evren.html';
+        }
+
+        function kalbimeGiris() {
+            window.location.href = 'kalbimm.html';
+        }
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>SELİN</title>
+  <title>ELGÜN</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,68 +20,13 @@
       position: relative;
     }
 
-    #text-sequence-container {
-        position: fixed; inset: 0; z-index: 20000;
-        background: radial-gradient(circle, #1a0510 0%, #000000 100%);
-        display: flex; 
-        align-items: center; justify-content: center;
-        pointer-events: none;
-        padding: 0 20px;
-    }
-
-    .seq-text {
-        position: absolute;
-        width: 100%;
-        text-align: center;
-        color: #fff;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 300; 
-        font-size: 28px;
-        letter-spacing: 4px;
-        opacity: 0;
-        transition: opacity 1.5s ease, transform 4s ease;
-    }
-
-    #seq-0 {
-        font-size: 24px;
-        line-height: 1.6;
-        letter-spacing: 2px;
-        font-weight: 400;
-    }
-
-    .final-sentence {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 45px; 
-        font-weight: 700; 
-        color: #fff;
-        letter-spacing: 2px;
-        text-shadow: none;
-    }
-    
-    .exploding-text {
-        animation: textExplode 0.5s forwards ease-out;
-    }
-    
-    @keyframes textExplode {
-        0% { transform: scale(1); opacity: 1; letter-spacing: 2px; filter: blur(0); }
-        50% { transform: scale(2); opacity: 0.5; letter-spacing: 20px; filter: blur(5px); }
-        100% { transform: scale(4); opacity: 0; letter-spacing: 50px; filter: blur(20px); }
-    }
-
-    #white-flash {
-        position: fixed; inset: 0; z-index: 25000;
-        background: #fff;
-        opacity: 0; pointer-events: none;
-        transition: opacity 3s ease-out;
-    }
-
     #ultimate-universe { 
-        position: fixed; inset: 0; z-index: 15000; 
-        background: radial-gradient(ellipse at center, #4a0032 0%, #1a0014 60%, #000 100%); 
-        display: none; 
-        flex-direction: column; align-items: center; justify-content: center; 
-        overflow: hidden; perspective: 1000px; 
-        opacity: 0; transition: opacity 4s ease; 
+      position: fixed; inset: 0; z-index: 15000; 
+      background: radial-gradient(ellipse at center, #4a0032 0%, #1a0014 60%, #000 100%); 
+      display: none; 
+      flex-direction: column; align-items: center; justify-content: center; 
+      overflow: hidden; perspective: 1000px; 
+      opacity: 0; transition: opacity 2s ease; 
     }
     #ultimate-universe.visible { display: flex; opacity: 1; }
     
@@ -227,8 +172,6 @@
             text-align: center;
         }
         .feature-star.active .star-label { bottom: 80px; transform: translateX(-50%) scale(1.1); }
-        .seq-text { font-size: 20px; letter-spacing: 2px; }
-        .final-sentence { font-size: 32px; letter-spacing: 1px; }
         .main-title { font-size: 30px; }
         .sub-title { font-size: 14px; letter-spacing: 2px; }
         .close-msg { padding: 10px 30px; font-size: 16px; }
@@ -239,20 +182,11 @@
 
     @media (max-width: 400px) {
         #orbit-wrapper { transform: scale(0.35); }
-        .seq-text { font-size: 18px; }
         .main-title { font-size: 26px; }
     }
   </style>
 </head>
 <body>
-
-  <div id="text-sequence-container">
-    <div id="seq-1" class="seq-text">Önce karanlık vardı...</div>
-    <div id="seq-2" class="seq-text">Sonra bir ışık doğdu...</div>
-    <div id="seq-3" class="seq-text final-sentence">Ve o ışık sendin...</div>
-  </div>
-
-  <div id="white-flash"></div>
 
   <div id="ultimate-universe">
     
@@ -265,12 +199,12 @@
         <div class="orbit-system" id="orbit-system">
         <div class="orbit-ring ring-1"></div> <div class="orbit-ring ring-2"></div> <div class="orbit-ring ring-3"></div>
         
-        <div class="feature-star fs-1" onclick="toggleStar(this)"><div class="star-label">KAHVERENGİ GÖZLERİN 💓</div></div>
-        <div class="feature-star fs-2" onclick="toggleStar(this)"><div class="star-label">AÇIK KAHVE KAŞLARIN 💓</div></div>
-        <div class="feature-star fs-3" onclick="toggleStar(this)"><div class="star-label">UZUN Kirpiklerin 💓</div></div>
-        <div class="feature-star fs-4" onclick="toggleStar(this)"><div class="star-label">KUMRAL SAÇLARIN 💓</div></div>
-        <div class="feature-star fs-5" onclick="toggleStar(this)"><div class="star-label">O Güzel Kokun 💓</div></div>
-        <div class="feature-star fs-6" onclick="toggleStar(this)"><div class="star-label">BAL DUDAKLARIN 💓</div></div>
+        <div class="feature-star fs-1" onclick="toggleStar(this)"><div class="star-label">Dünüm</div></div>
+        <div class="feature-star fs-2" onclick="toggleStar(this)"><div class="star-label">Bugünüm</div></div>
+        <div class="feature-star fs-3" onclick="toggleStar(this)"><div class="star-label">Geleceğim</div></div>
+        <div class="feature-star fs-4" onclick="toggleStar(this)"><div class="star-label">Huzurum</div></div>
+        <div class="feature-star fs-5" onclick="toggleStar(this)"><div class="star-label">Neşem</div></div>
+        <div class="feature-star fs-6" onclick="toggleStar(this)"><div class="star-label">Sığınağım</div></div>
         </div>
     </div>
 
@@ -300,91 +234,17 @@
   </div>
 
   <script>
-    const universeAudio = new Audio("sounds/sesli.mp3"); 
-    universeAudio.loop = true;
-    universeAudio.volume = 0.2; 
-
-    const tensionAudio = new Audio("sounds/gerilim.mp3"); 
-    tensionAudio.volume = 1.0; 
-
-    const mainSong = new Audio("sounds/evren.mp3");
-    mainSong.loop = true; 
-
     window.addEventListener('load', startExperience);
 
     function startExperience() {
-        const textContainer = document.getElementById('text-sequence-container');
-        
-        const text0 = document.getElementById('seq-0');
-        const text1 = document.getElementById('seq-1');
-        const text2 = document.getElementById('seq-2');
-        const text3 = document.getElementById('seq-3');
-        const whiteFlash = document.getElementById('white-flash');
         const universe = document.getElementById('ultimate-universe');
 
-        universeAudio.play().catch(e => console.log("Otomatik oynatma engellendi", e));
-        tensionAudio.play().catch(e => console.log("Otomatik oynatma engellendi", e));
-
-        setTimeout(() => {
-            text0.style.opacity = '0';
-            text0.style.transform = 'scale(0.9)';
-        }, 3500);
-
-        setTimeout(() => {
-            text1.style.opacity = '1';
-            text1.style.transform = 'scale(1.1)';
-        }, 4500);
-
-        setTimeout(() => {
-            text1.style.opacity = '0';
-            text1.style.transform = 'scale(0.9)';
-        }, 7000);
-
-        setTimeout(() => {
-            text2.style.opacity = '1';
-            text2.style.transform = 'scale(1.1)';
-        }, 8000);
-
-        setTimeout(() => {
-            text2.style.opacity = '0';
-            text2.style.transform = 'scale(0.9)';
-        }, 10500);
-
-        setTimeout(() => {
-            text3.style.opacity = '1';
-            text3.style.transform = 'scale(1.0)';
-        }, 11500);
-
-        setTimeout(() => {
-             text3.style.transition = "transform 2s ease-in"; 
-             text3.style.transform = "scale(1.4)";
-        }, 13000);
-
-        setTimeout(() => {
-            text3.classList.add('exploding-text'); 
-            whiteFlash.style.opacity = '1'; 
-        }, 15000);
-
-        setTimeout(() => {
-            textContainer.style.display = 'none'; 
-            universe.classList.add('visible'); 
-            
-            createDeepStars(); 
-            startShootingStars(); 
-
-            whiteFlash.style.opacity = '0';
-            setTimeout(() => { whiteFlash.style.display = 'none'; }, 3000);
-            
-            fadeInAudio();
-            
-        }, 15500);
-    }
-
-    function fadeInAudio() {
-        if (universeAudio.volume < 1) {
-            universeAudio.volume = Math.min(1, universeAudio.volume + 0.05);
-            setTimeout(fadeInAudio, 200); 
-        }
+        // Evreni doğrudan görünür yapıyoruz
+        universe.classList.add('visible'); 
+        
+        // Yıldızları ve kayan yıldız mekaniğini başlatıyoruz
+        createDeepStars(); 
+        startShootingStars(); 
     }
 
     function createDeepStars() {
@@ -419,9 +279,6 @@
     });
 
     function revealMainMessage() { 
-        universeAudio.pause();
-        tensionAudio.pause();
-        mainSong.play().catch(e => console.log("Şarkı çalma hatası:", e));
         document.getElementById('final-msg-overlay').classList.add('show'); 
     }
 
@@ -488,5 +345,3 @@
   </script>
 </body>
 </html>
-
-
